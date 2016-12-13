@@ -1,0 +1,66 @@
+﻿
+@{
+    ViewBag.Title = "Job Detail";
+    var job = ViewBag.JobView as Shift.Entities.JobView;
+}
+
+<h2>@ViewBag.Title</h2>
+
+
+<div class="row">
+    <div class="col-sm-12">
+        <p>
+            <label>Job ID:</label> <span>@job.JobID</span>
+        </p>
+        <p>
+            <label>App ID:</label> <span>@job.AppID</span>
+        </p>
+        <p>
+            <label>User ID:</label> <span>@job.UserID</span>
+        </p>
+        <p>
+            <label>Process ID:</label> <span>@job.ProcessID</span>
+        </p>
+        <p>
+            <label>Type:</label> <span>@job.JobType</span>
+        </p>
+        <p>
+            <label>Job Name:</label> <span>@job.JobName</span>
+        </p>
+        <p>
+            <label>Status:</label> <span>@job.StatusLabel</span>
+        </p>
+        <p>
+            <label>Progress Percent:</label> <span>@job.Percent</span>
+        </p>
+        <p>
+            <label>Note:</label> <span>@Html.Raw(job.Note)</span>
+        </p>
+        <p>
+            <label>Progress Data:</label> <span>@job.Data</span>
+        </p>
+        <p>
+            <label>Command:</label> <span>@job.Command</span>
+        </p>
+        <p>
+            <label>Error:</label> <span>@job.Error</span>
+        </p>
+        <p>
+            <label>Start:</label> <span>@(job.Start == null ? "" : job.Start.GetValueOrDefault().ToString("MM/dd/yyyy hh:mm tt"))</span>
+        </p>
+        <p>
+            <label>End:</label> <span>@(job.End == null ? "" : job.End.GetValueOrDefault().ToString("MM/dd/yyyy hh:mm tt"))</span>
+        </p>
+        <p>
+            <label>Created:</label> <span>@(job.Created == null ? "" : job.Created.GetValueOrDefault().ToString("MM/dd/yyyy hh:mm tt"))</span>
+        </p>
+        <p>
+            <label>Invoke Meta:</label> <br />
+            <span>@job.InvokeMeta</span>
+        </p>
+        <p>
+            <label>Parameters:</label> <br />
+            <span>@job.DecryptedParameters</span>
+        </p>
+    </div>
+</div>

@@ -1,0 +1,162 @@
+﻿
+@{
+    ViewBag.Title = "Status & Progress";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div class="row">
+    <div class="col-sm-12">
+
+        <div id="grid"></div>
+
+    </div>
+
+</div>
+
+@section scripts {
+<script type="text/javascript">
+var readDataUrl = '@Url.Action("ReadData", "Progress")';
+var methodUrl = '@Url.Action("Index", "Method")';
+
+$(document).ready(function () {
+
+    refreshTable();
+
+    initializeGrid();
+
+});
+
+function refreshTable() {
+    setInterval(
+        function () {
+            $("#grid").data("kendoGrid").dataSource.read();
+        },
+        2000
+    );
+}
+
+function initializeGrid() {
+    var dataSource = new kendo.data.DataSource({
+        serverPaging: true,
+        serverSorting: true,
+        serverFiltering: true,
+        serverGrouping: true,
+        serverAggregates: true,
+        pageSize: 20,
+        page: 1,
+        total: 0,
+        filter: [],
+        type: 'aspnetmvc-ajax',
+        transport: {
+            read:
+            {
+                url: readDataUrl
+            }
+        },
+        sort: { field: "Created", dir: "asc" },
+        schema: {
+            data: "Data",
+            total: "Total",
+            errors: "Errors",
+            model: {
+                fields: {
+                    JobID: { type: "number" },
+                    AppID: { type: "string" },
+                    UserID: { type: "number" },
+                    ProcessID: { type: "number" },
+                    JobName: { type: "string" },
+                    Status: { type: "number" },
+                    StatusLabel: { type: "string" },
+                    Error: { type: "string" },
+                    Percent: { type: "string" },
+                    Note: { type: "string" },
+                    Start: { type: "date" },
+                    End: { type: "date" },
+                    Created: { type: "date" },
+                }
+            }
+        },
+    });
+
+    $("#grid").kendoGrid({
+        selectable: false,
+        filterable: true,
+        pageable: {
+            pageSizes: [5, 10, 25, 50, 100, 500 ]
+        },
+        sortable: {
+            mode: "single",
+            allowUnsort: true
+        },
+        scrollable: false,
+        columns: [
+            {
+                field: "JobID",
+                title: "JID",
+                width: 50
+            },
+            {
+                field: "AppID",
+                width: 40
+            },
+            {
+                field: "UserID",
+                title: "UID",
+                width: 40
+            },
+            {
+                field: "ProcessID",
+                title: "PID",
+                width: 50
+            },
+            {
+                field: "JobName",
+                title: "Name",
+                template: '<a href="' + methodUrl + '/?jobID=#=JobID#" target="_blank">#=JobName#</a>',
+                width: 100
+            },
+            {
+                field: "StatusLabel",
+                title: "Status",
+                width: 80
+            },
+            {
+                field: "Percent",
+                title: "%",
+                template: '#=Percent == null ? "" : Percent + "%"#',
+                width: 40
+            },
+            {
+                field: "Note",
+                encoded: false,
+                template: '<div style="overflow-y: auto; max-height: 60px; word-break:break-all;">#=(Note == null ? "" : Note)#</div>',
+                width: 200
+            },
+            {
+                field: "Error",
+                template: '<div style="overflow-y: auto; max-height: 60px; word-break:break-all;">#=(Error == null ? "" : Error)#</div>',
+                width: 140
+            },
+            {
+                field: "Start",
+                width: 100,
+                format: "{0:MM/dd/yyyy hh:mm tt}"
+            },
+            {
+                field: "End",
+                width: 100,
+                format: "{0:MM/dd/yyyy hh:mm tt}"
+            },
+            {
+                field: "Created",
+                width: 100,
+                format: "{0:MM/dd/yyyy hh:mm tt}"
+            },
+        ],
+        dataSource: dataSource,
+    });
+}
+
+</script>
+}

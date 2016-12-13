@@ -1,0 +1,135 @@
+﻿
+@{
+    ViewBag.Title = "Jobs Results";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="command-bar btn-group">
+            <a href="#" class="btn btn-default" data-action="" data-key="refresh">Refresh</a>
+        </div>
+    </div>
+
+</div>
+
+<div class="row" style="margin-top: 15px;">
+    <div class="col-sm-12">
+
+        <div id="grid"></div>
+
+    </div>
+
+</div>
+
+@section scripts {
+<script type="text/javascript">
+var readDataUrl = '@Url.Action("ReadData", "JobResult")';
+var getContentUrl = '@Url.Action("GetContent", "JobResult")';
+
+
+$(document).ready(function () {
+
+    initializeGrid();
+
+});
+
+function initializeGrid() {
+    var dataSource = new kendo.data.DataSource({
+        serverPaging: true,
+        serverSorting: true,
+        serverFiltering: true,
+        serverGrouping: true,
+        serverAggregates: true,
+        pageSize: 20,
+        page: 1,
+        total: 0,
+        filter: [],
+        type: 'aspnetmvc-ajax',
+        transport: {
+            read:
+            {
+                url: readDataUrl
+            }
+        },
+        sort: { field: "JobResultID", dir: "asc" },
+        schema: {
+            data: "Data",
+            total: "Total",
+            errors: "Errors",
+            model: {
+                fields: {
+                    JobResultID: { type: "number"},
+                    JobID: { type: "number" },
+                    ExternalID: { type: "string" },
+                    Name: { type: "string" },
+                    ContentType: { type: "string" }
+                }
+            }
+        },
+    });
+
+    $("#grid").kendoGrid({
+        selectable: false,
+        filterable: true,
+        pageable: {
+            pageSizes: [5, 10, 25, 50, 100, 500 ]
+        },
+        sortable: {
+            mode: "single",
+            allowUnsort: true
+        },
+        scrollable: false,
+        columns: [
+            {
+                field: "JobResultID",
+                title: "JobResultID",
+                width: 50
+            },
+            {
+                field: "JobID",
+                width: 50
+            },
+            {
+                field: "ExternalID",
+                title: "EID",
+                width: 120
+            },
+            {
+                field: "Name",
+                width: 140
+            },
+            {
+                field: "ContentType",
+                width: 140
+            },
+            {
+                title: "View Content",
+                template: '<a href="' + getContentUrl + '?externalID=#=ExternalID#">view</a>',
+                width: 80
+            },
+        ],
+        dataSource: dataSource,
+    });
+
+    var grid = $("#grid").data("kendoGrid");
+
+
+    $('.command-bar a[data-key]').click(function () {
+        var $this = $(this);
+        var key = $this.attr('data-key');
+        var action = $this.attr('data-action');
+        var ids;
+        switch (key) {
+            case 'refresh':
+                grid.dataSource.read();
+                break;
+        }
+
+        return false;
+    });
+}
+
+</script>
+}

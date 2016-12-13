@@ -1,0 +1,307 @@
+﻿@using MyApp.Client.Helpers;
+
+@{
+
+    ViewBag.Title = "Dashboard";
+}
+<h2>@ViewBag.Title</h2>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="command-bar btn-group">
+            <a href="#" class="btn btn-default" data-action="" data-key="refresh">Refresh</a>
+            <a href="#" class="btn btn-default" data-action="@Url.Action("Stop", "Dashboard")" data-key="stop">Stop</a>
+            <a href="#" class="btn btn-default" data-action="@Url.Action("Reset", "Dashboard")" data-key="reset">Reset</a>
+            <a href="#" class="btn btn-default" data-action="@Url.Action("Delete", "Dashboard")" data-key="delete">Delete</a>
+        </div>
+    </div>
+
+    @if (Html.IsDebug() || HttpContext.Current.IsDebuggingEnabled)
+    {
+        <div class="col-sm-6">
+            <div class="command-bar btn-group pull-right">
+                <a href="#" class="btn btn-default" data-action="@Url.Action("Start", "Dashboard")" data-key="run">Start</a>
+                <a href="#" class="btn btn-default" data-action="@Url.Action("CleanUp", "Dashboard")" data-key="cleanup">Clean Up</a>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="row" style="margin-top: 15px;">
+    <div class="col-sm-12">
+        <div id="grid"></div>
+    </div>
+</div>
+
+@section scripts {
+<script type="text/javascript">
+var readDataUrl = '@Url.Action("ReadData", "Dashboard")';
+var methodUrl = '@Url.Action("Index", "Method")';
+var rtProgressUrl = '@Url.Action("Index", "RTProgress")';
+
+$(document).ready(function () {
+
+    initializeGrid();
+
+});
+
+function initializeGrid() {
+    var dataSource = new kendo.data.DataSource({
+        serverPaging: true,
+        serverSorting: true,
+        serverFiltering: true,
+        serverGrouping: true,
+        serverAggregates: true,
+        pageSize: 20,
+        page: 1,
+        total: 0,
+        filter: [],
+        type: 'aspnetmvc-ajax',
+        transport: {
+            read:
+            {
+                url: readDataUrl
+            }
+        },
+        /*
+        //Use WebAPI instead?
+        type: "webapi",
+        transport: {
+            read:
+            {
+                url: "/api/DashboardApi",
+                contentType: "application/json"
+            }
+        },
+        */
+        sort: { field: "Created", dir: "asc" },
+        schema: {
+            data: "Data",
+            total: "Total",
+            errors: "Errors",
+            model: {
+                fields: {
+                    JobID: { type: "number" },
+                    AppID: { type: "string" },
+                    UserID: { type: "number" },
+                    ProcessID: { type: "number" },
+                    JobType: { type: "string" },
+                    JobName: { type: "string" },
+                    InvokeMeta: { type: "string" },
+                    Parameters: { type: "string" },
+                    Status: { type: "number" },
+                    Error: { type: "string" },
+                    StatusLabel: { type: "string" },
+                    Percent: { type: "string" },
+                    Note: { type: "string" },
+                    Data: { type: "string" },
+                    Start: { type: "date" },
+                    End: { type: "date" },
+                    Created: { type: "date" },
+                }
+            }
+        },
+    });
+
+    $("#grid").kendoGrid({
+        selectable: 'multiple, row',
+        filterable: true,
+        pageable: {
+            pageSizes: [5, 10, 25, 50, 100, 500]
+        },
+        sortable: {
+            mode: "single",
+            allowUnsort: true
+        },
+        scrollable: false,
+        columns: [
+            {
+                filterable: false,
+                field: 'select',
+                sortable: false,
+                title: '&nbsp;',
+                template: '<input type="checkbox" class="select" />',
+                width: 30
+            },
+            {
+                field: "JobID",
+                title: "JID",
+                template: '<a href="' + rtProgressUrl + '?jobID=#=JobID#" target="_blank">#=JobID#</a>',
+                width: 50
+            },
+            {
+                field: "AppID",
+                width: 40
+            },
+            {
+                field: "UserID",
+                title: "UID",
+                width: 40
+            },
+            {
+                field: "ProcessID",
+                title: "PID",
+                width: 40
+            },
+            {
+                field: "JobType",
+                title: "Type",
+                width: 40
+            },
+            {
+                field: "JobName",
+                title: "Name",
+                template: '<a href="' + methodUrl + '?jobID=#=JobID#" target="_blank">#=JobName#</a>',
+                width: 100
+            },
+            {
+                field: "StatusLabel",
+                title: "Status",
+                width: 80
+            },
+            {
+                field: "Percent",
+                title: "%",
+                template: '#=Percent == null ? "" : Percent + "%"#',
+                width: 40
+            },
+            {
+                field: "Note",
+                encoded: false,
+                template: '<div style="overflow-y: auto; max-height: 60px; word-break:break-all;">#=(Note == null ? "" : Note)#</div>',
+                width: 160
+            },
+            {
+                field: "Data",
+                title: "Progress Data",
+                encoded: false,
+                template: '<div style="overflow-y: auto; max-height: 60px; word-break:break-all;">#=(Data == null ? "" : Data)#</div>',
+                width: 200
+            },
+            {
+                field: "Command",
+                title: "CMD",
+                width: 60
+            },
+            {
+                field: "Error",
+                template: '<div style="overflow-y: auto; max-height: 60px; word-break:break-all;">#=(Error == null ? "" : Error)#</div>',
+                width: 120
+            },
+            {
+                field: "Start",
+                width: 100,
+                format: "{0:MM/dd/yyyy hh:mm tt}"
+            },
+            {
+                field: "End",
+                width: 100,
+                format: "{0:MM/dd/yyyy hh:mm tt}"
+            },
+            {
+                field: "Created",
+                width: 100,
+                format: "{0:MM/dd/yyyy hh:mm tt}"
+            },
+        ],
+        dataSource: dataSource,
+        dataBound: function (arg) {
+            var thisGrid = arg.sender;
+            thisGrid.table.find('.selectAll').prop('checked', false); //reset select all checkbox
+            //handle checkbox change
+            thisGrid.table.find("tbody tr").find("td:first input[type='checkbox']")
+            .change(function () {
+                var $this = $(this);
+                var row = $this.closest('tr');
+                if ($this.is(':checked')) {
+                    thisGrid.select(row);
+                } else {
+                    row.toggleClass('k-state-selected', false);
+                    row.attr('aria-selected', false);
+                }
+                thisGrid.table.find('.selectAll').prop('checked', false); //reset select all checkbox
+            })
+            .end()
+            .mousedown(function (e) {
+                e.stopPropagation();
+            });
+        }
+    });
+
+    var grid = $("#grid").data("kendoGrid");
+    grid.thead.find("th:first")
+        .append($('<input class="selectAll" type="checkbox"/>'))
+        .delegate(".selectAll", "click", function () {
+            var checkbox = $(this);
+            grid.table.find("tbody tr").each(function () {
+                var $this = $(this);
+                $this.find("td:first input").prop('checked', checkbox.is(':checked'));
+                if (checkbox.is(':checked')) {
+                    grid.select($this);
+                } else {
+                    grid.clearSelection();
+                }
+            });
+        });
+
+    $('.command-bar a[data-key]').click(function () {
+        var $this = $(this);
+        var key = $this.attr('data-key');
+        var action = $this.attr('data-action');
+        var ids;
+        switch (key) {
+            case 'refresh':
+                grid.dataSource.read();
+                break;
+            case 'reset':
+            case 'delete':
+            case 'stop':
+            case 'run':
+                ids = getSelectedRecords('#grid', 'JobID');
+                if (confirm('Are you sure you want to ' + key.toUpperCase() + ' jobs?')) {
+                    $.post(action, { "ids": ids }, function (result) {
+                        grid.dataSource.read();
+                    });
+                }
+                break;
+            case 'cleanup':
+                if (confirm('Are you sure you want to ' + key.toUpperCase() + ' jobs?')) {
+                    $.post(action, null, function (result) {
+                        grid.dataSource.read();
+                    });
+                }
+                break;
+        }
+        return false;
+    });
+
+
+}
+
+function getSelectedRecords(gridid, params) {
+    var grid = $(gridid).data("kendoGrid");
+    var arr = [];
+    var dataSource = grid.dataSource;
+    if ($.isArray(params)) {
+        grid.select().each(function () {
+            var item = dataSource.getByUid($(this).data('uid'));
+            var idlist = {};
+            for (var i = 0; i < params.length; i++) {
+                idlist[params[i]] = item[params[i]];
+            }
+            arr.push(idlist);
+        });
+    } else {
+        grid.select().each(function () {
+            var item = dataSource.getByUid($(this).data('uid'));
+            arr.push(item[params]);
+        });
+    }
+
+    //console.log('getSelectedRecords: ' + JSON.stringify(arr)); //DEBUG
+
+    return arr;
+}
+
+</script>
+}

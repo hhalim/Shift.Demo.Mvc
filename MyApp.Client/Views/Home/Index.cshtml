@@ -1,0 +1,19 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="row" style="padding-top: 20px">
+    <div class="col-sm-12">
+        <ul>
+            <li>
+                <a href="@Url.Action("Index","Dashboard")">Dashboard</a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "Progress")">Status & Progress</a>
+            </li>
+            <li>
+                <a href="@Url.Action("Index","Jobs")">Add Jobs</a>
+            </li>
+        </ul>
+    </div>
+</div>
