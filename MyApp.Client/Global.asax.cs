@@ -25,11 +25,12 @@ namespace MyApp.Client
 
             //Shift
             var options = new Shift.Options();
-            options.AssemblyListFilePath = ConfigurationManager.AppSettings["AssemblyListFilePath"];
+            options.AssemblyListPath = ConfigurationManager.AppSettings["AssemblyListPath"];
             options.MaxRunnableJobs = Convert.ToInt32(ConfigurationManager.AppSettings["MaxRunableJobs"]);
             options.ProcessID = Convert.ToInt32(ConfigurationManager.AppSettings["ShiftPID"]);
             options.DBConnectionString = ConfigurationManager.ConnectionStrings["ShiftDBConnection"].ConnectionString;
-            options.RedisConnectionString = ConfigurationManager.AppSettings["RedisConfiguration"];
+            options.CacheConfigurationString = ConfigurationManager.AppSettings["RedisConfiguration"];
+            //options.EncryptionKey = ConfigurationManager.AppSettings["ShiftEncryptionParametersKey"]; //optional, will encrypt parameters in DB if filled
 
             Application["Shift.JobClient"] = new JobClient(options); //only the DBConnectionString and RedisConnectionString are required for Client's background job
 
@@ -40,6 +41,7 @@ namespace MyApp.Client
             Application["Shift.JobServer"] = jobServer;
         }
 
+        //Inject httpContextHttpContextBase into MVC constructor
         protected void AutofacConfiguration()
         {
             var builder = new ContainerBuilder();
