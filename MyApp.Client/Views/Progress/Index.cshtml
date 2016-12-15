@@ -20,142 +20,101 @@ var readDataUrl = '@Url.Action("ReadData", "Progress")';
 var methodUrl = '@Url.Action("Index", "Method")';
 
 $(document).ready(function () {
-
     refreshTable();
-
     initializeGrid();
-
 });
+
+function initializeGrid() {
+    var dateField = function (config) {
+        jsGrid.Field.call(this, config);
+    };
+    dateField.prototype = new jsGrid.Field({
+        align: "center",              
+        sorter: function (date1, date2) {
+            return new Date(date1) - new Date(date2);
+        },
+        itemTemplate: function (value) {
+            if (value) {
+                var date = new Date(value);
+                return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+            } else {
+                return;
+            }
+        },
+    });
+    jsGrid.fields.date = dateField;
+
+    var longText = function (config) {
+        jsGrid.Field.call(this, config);
+    };
+    longText.prototype = new jsGrid.Field({
+        itemTemplate: function (value, item) {
+            if (value)
+                return '<div style="overflow-y: auto; max-height: 60px; word-break:break-all;">' + value + '</div>';
+            else
+                return;
+        }
+    });
+    jsGrid.fields.longtext = longText;
+
+    $("#grid").jsGrid({
+        width: "100%",
+        height: "auto",
+
+        inserting: false,
+        editing: false,
+        sorting: false,
+
+        paging: true,
+        pageIndex: 1,
+        pageSize: 20,
+        pageLoading: true,
+        pagerFormat: "{prev} {pages} {next}      {pageIndex} of {pageCount}",
+
+        loadIndication: true,
+        loadIndicationDelay: 500,
+        loadMessage: "Please, wait...",
+        loadShading: true,
+
+        fields: [
+            { name: "JobID", type: "number", width: "40", title: "JID" },
+            { name: "AppID", type: "text", width: "50" },
+            { name: "UserID", type: "number", width: "40", title: "UID" },
+            { name: "ProcessID", type: "number", width: "40", title: "PID" },
+            { name: "StatusLabel", type: "text", width: "80", title: "Status" },
+            { name: "Percent", type: "text", width: "50", title: "%" },
+            { name: "Note", type: "longtext", width: "180" },
+            { name: "Error", type: "longtext", width: "140" },
+            { name: "Start", type: "date", width: "80" },
+            { name: "End", type: "date", width: "80" },
+            { name: "Created", type: "date", width: "80" },
+        ],
+
+        autoload: true,
+        controller: {
+            loadData: function (filter) {
+                var d = $.Deferred();
+                $.ajax({
+                    type: "GET",
+                    url: readDataUrl,
+                    data: filter,
+                }).done(function (response) {
+                    d.resolve(response);
+                    return;
+                });
+                return d.promise();
+            }
+        }
+    });
+}
 
 function refreshTable() {
     setInterval(
         function () {
-            $("#grid").data("kendoGrid").dataSource.read();
+            $("#grid").jsGrid('render');
         },
         2000
     );
-}
-
-function initializeGrid() {
-    var dataSource = new kendo.data.DataSource({
-        serverPaging: true,
-        serverSorting: true,
-        serverFiltering: true,
-        serverGrouping: true,
-        serverAggregates: true,
-        pageSize: 20,
-        page: 1,
-        total: 0,
-        filter: [],
-        type: 'aspnetmvc-ajax',
-        transport: {
-            read:
-            {
-                url: readDataUrl
-            }
-        },
-        sort: { field: "Created", dir: "asc" },
-        schema: {
-            data: "Data",
-            total: "Total",
-            errors: "Errors",
-            model: {
-                fields: {
-                    JobID: { type: "number" },
-                    AppID: { type: "string" },
-                    UserID: { type: "number" },
-                    ProcessID: { type: "number" },
-                    JobName: { type: "string" },
-                    Status: { type: "number" },
-                    StatusLabel: { type: "string" },
-                    Error: { type: "string" },
-                    Percent: { type: "string" },
-                    Note: { type: "string" },
-                    Start: { type: "date" },
-                    End: { type: "date" },
-                    Created: { type: "date" },
-                }
-            }
-        },
-    });
-
-    $("#grid").kendoGrid({
-        selectable: false,
-        filterable: true,
-        pageable: {
-            pageSizes: [5, 10, 25, 50, 100, 500 ]
-        },
-        sortable: {
-            mode: "single",
-            allowUnsort: true
-        },
-        scrollable: false,
-        columns: [
-            {
-                field: "JobID",
-                title: "JID",
-                width: 50
-            },
-            {
-                field: "AppID",
-                width: 40
-            },
-            {
-                field: "UserID",
-                title: "UID",
-                width: 40
-            },
-            {
-                field: "ProcessID",
-                title: "PID",
-                width: 50
-            },
-            {
-                field: "JobName",
-                title: "Name",
-                template: '<a href="' + methodUrl + '/?jobID=#=JobID#" target="_blank">#=JobName#</a>',
-                width: 100
-            },
-            {
-                field: "StatusLabel",
-                title: "Status",
-                width: 80
-            },
-            {
-                field: "Percent",
-                title: "%",
-                template: '#=Percent == null ? "" : Percent + "%"#',
-                width: 40
-            },
-            {
-                field: "Note",
-                encoded: false,
-                template: '<div style="overflow-y: auto; max-height: 60px; word-break:break-all;">#=(Note == null ? "" : Note)#</div>',
-                width: 200
-            },
-            {
-                field: "Error",
-                template: '<div style="overflow-y: auto; max-height: 60px; word-break:break-all;">#=(Error == null ? "" : Error)#</div>',
-                width: 140
-            },
-            {
-                field: "Start",
-                width: 100,
-                format: "{0:MM/dd/yyyy hh:mm tt}"
-            },
-            {
-                field: "End",
-                width: 100,
-                format: "{0:MM/dd/yyyy hh:mm tt}"
-            },
-            {
-                field: "Created",
-                width: 100,
-                format: "{0:MM/dd/yyyy hh:mm tt}"
-            },
-        ],
-        dataSource: dataSource,
-    });
 }
 
 </script>

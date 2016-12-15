@@ -24,22 +24,5 @@ textarea {
     max-width: 280px;
 }
 
-.k-state-selected {
-    background-color: #96CC2E;
-    color: inherit;
-}
-
-.k-pager-numbers .k-state-selected {
-    color: #333;
-}
-
 .nav-brand img {
-    max-height: 50px;
-}
-
-.k-grid-header th.k-header > .k-link {
-    text-overflow: clip;
-}
-.k-grid td  {
-    padding: 2px 3px;
 }

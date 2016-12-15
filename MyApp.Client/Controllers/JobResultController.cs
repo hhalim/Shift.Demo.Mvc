@@ -3,6 +3,7 @@ using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using Shift;
 using Shift.Entities;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Web;
@@ -27,21 +28,30 @@ namespace MyApp.Client.Controllers
             return View();
         }
 
-        public ActionResult ReadData([DataSourceRequest] DataSourceRequest request)
+        public ActionResult ReadData(int? pageIndex, int? pageSize)
         {
-            DataSourceResult result = null;
+            var result = new List<JobResult>();
+            var totalCount = 0;
             using (var db = new BGProcess(DBConstant.ConnectionName))
             {
-                IQueryable<JobResult> query = from p in db.JobResult
-                                              select p;
-                result = query.ToDataSourceResult(request);
-                foreach(JobResult row in result.Data)
+                totalCount = (from p in db.JobResult
+                              select p.JobResultID).Count();
+                IQueryable<JobResult> query = (from p in db.JobResult
+                                               orderby p.JobResultID ascending
+                                               select p)
+                                                .Skip((pageIndex.GetValueOrDefault() - 1) * pageSize.GetValueOrDefault())
+                                                .Take(pageSize.GetValueOrDefault());
+                result = query.ToList();
+                foreach (JobResult row in result)
                 {
                     row.BinaryContent = null; //don't want to send this to browser
                 }
             }
 
-            return Json(result, JsonRequestBehavior.AllowGet);
+            var output = new Dictionary<string, object>();
+            output.Add("data", result);
+            output.Add("itemsCount", totalCount);
+            return Json(output, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetContent(string externalID)

@@ -40,234 +40,151 @@ var methodUrl = '@Url.Action("Index", "Method")';
 var rtProgressUrl = '@Url.Action("Index", "RTProgress")';
 
 $(document).ready(function () {
-
     initializeGrid();
-
+    initCommands();
 });
 
 function initializeGrid() {
-    var dataSource = new kendo.data.DataSource({
-        serverPaging: true,
-        serverSorting: true,
-        serverFiltering: true,
-        serverGrouping: true,
-        serverAggregates: true,
-        pageSize: 20,
-        page: 1,
-        total: 0,
-        filter: [],
-        type: 'aspnetmvc-ajax',
-        transport: {
-            read:
-            {
-                url: readDataUrl
-            }
+    var dateField = function (config) {
+        jsGrid.Field.call(this, config);
+    };
+    dateField.prototype = new jsGrid.Field({
+        align: "center",
+        sorter: function (date1, date2) {
+            return new Date(date1) - new Date(date2);
         },
-        /*
-        //Use WebAPI instead?
-        type: "webapi",
-        transport: {
-            read:
-            {
-                url: "/api/DashboardApi",
-                contentType: "application/json"
-            }
-        },
-        */
-        sort: { field: "Created", dir: "asc" },
-        schema: {
-            data: "Data",
-            total: "Total",
-            errors: "Errors",
-            model: {
-                fields: {
-                    JobID: { type: "number" },
-                    AppID: { type: "string" },
-                    UserID: { type: "number" },
-                    ProcessID: { type: "number" },
-                    JobType: { type: "string" },
-                    JobName: { type: "string" },
-                    InvokeMeta: { type: "string" },
-                    Parameters: { type: "string" },
-                    Status: { type: "number" },
-                    Error: { type: "string" },
-                    StatusLabel: { type: "string" },
-                    Percent: { type: "string" },
-                    Note: { type: "string" },
-                    Data: { type: "string" },
-                    Start: { type: "date" },
-                    End: { type: "date" },
-                    Created: { type: "date" },
-                }
+        itemTemplate: function (value) {
+            if (value) {
+                var date = new Date(value);
+                return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+            } else {
+                return;
             }
         },
     });
+    jsGrid.fields.date = dateField;
 
-    $("#grid").kendoGrid({
-        selectable: 'multiple, row',
-        filterable: true,
-        pageable: {
-            pageSizes: [5, 10, 25, 50, 100, 500]
-        },
-        sortable: {
-            mode: "single",
-            allowUnsort: true
-        },
-        scrollable: false,
-        columns: [
-            {
-                filterable: false,
-                field: 'select',
-                sortable: false,
-                title: '&nbsp;',
-                template: '<input type="checkbox" class="select" />',
-                width: 30
-            },
-            {
-                field: "JobID",
-                title: "JID",
-                template: '<a href="' + rtProgressUrl + '?jobID=#=JobID#" target="_blank">#=JobID#</a>',
-                width: 50
-            },
-            {
-                field: "AppID",
-                width: 40
-            },
-            {
-                field: "UserID",
-                title: "UID",
-                width: 40
-            },
-            {
-                field: "ProcessID",
-                title: "PID",
-                width: 40
-            },
-            {
-                field: "JobType",
-                title: "Type",
-                width: 40
-            },
-            {
-                field: "JobName",
-                title: "Name",
-                template: '<a href="' + methodUrl + '?jobID=#=JobID#" target="_blank">#=JobName#</a>',
-                width: 100
-            },
-            {
-                field: "StatusLabel",
-                title: "Status",
-                width: 80
-            },
-            {
-                field: "Percent",
-                title: "%",
-                template: '#=Percent == null ? "" : Percent + "%"#',
-                width: 40
-            },
-            {
-                field: "Note",
-                encoded: false,
-                template: '<div style="overflow-y: auto; max-height: 60px; word-break:break-all;">#=(Note == null ? "" : Note)#</div>',
-                width: 160
-            },
-            {
-                field: "Data",
-                title: "Progress Data",
-                encoded: false,
-                template: '<div style="overflow-y: auto; max-height: 60px; word-break:break-all;">#=(Data == null ? "" : Data)#</div>',
-                width: 200
-            },
-            {
-                field: "Command",
-                title: "CMD",
-                width: 60
-            },
-            {
-                field: "Error",
-                template: '<div style="overflow-y: auto; max-height: 60px; word-break:break-all;">#=(Error == null ? "" : Error)#</div>',
-                width: 120
-            },
-            {
-                field: "Start",
-                width: 100,
-                format: "{0:MM/dd/yyyy hh:mm tt}"
-            },
-            {
-                field: "End",
-                width: 100,
-                format: "{0:MM/dd/yyyy hh:mm tt}"
-            },
-            {
-                field: "Created",
-                width: 100,
-                format: "{0:MM/dd/yyyy hh:mm tt}"
-            },
-        ],
-        dataSource: dataSource,
-        dataBound: function (arg) {
-            var thisGrid = arg.sender;
-            thisGrid.table.find('.selectAll').prop('checked', false); //reset select all checkbox
-            //handle checkbox change
-            thisGrid.table.find("tbody tr").find("td:first input[type='checkbox']")
-            .change(function () {
-                var $this = $(this);
-                var row = $this.closest('tr');
-                if ($this.is(':checked')) {
-                    thisGrid.select(row);
-                } else {
-                    row.toggleClass('k-state-selected', false);
-                    row.attr('aria-selected', false);
-                }
-                thisGrid.table.find('.selectAll').prop('checked', false); //reset select all checkbox
-            })
-            .end()
-            .mousedown(function (e) {
-                e.stopPropagation();
-            });
+    var longText = function (config) {
+        jsGrid.Field.call(this, config);
+    };
+    longText.prototype = new jsGrid.Field({
+        itemTemplate: function (value, item) {
+            if (value)
+                return '<div style="overflow-y: auto; max-height: 60px; word-break:break-all;">' + value + '</div>';
+            else
+                return;
         }
     });
+    jsGrid.fields.longtext = longText;
 
-    var grid = $("#grid").data("kendoGrid");
-    grid.thead.find("th:first")
-        .append($('<input class="selectAll" type="checkbox"/>'))
-        .delegate(".selectAll", "click", function () {
-            var checkbox = $(this);
-            grid.table.find("tbody tr").each(function () {
-                var $this = $(this);
-                $this.find("td:first input").prop('checked', checkbox.is(':checked'));
-                if (checkbox.is(':checked')) {
-                    grid.select($this);
-                } else {
-                    grid.clearSelection();
+    $("#grid").jsGrid({
+        width: "100%",
+        height: "auto",
+
+        inserting: false,
+        editing: false,
+        sorting: false,
+
+        paging: true,
+        pageIndex: 1,
+        pageSize: 20,
+        pageLoading: true,
+        pagerFormat: "{prev} {pages} {next}      {pageIndex} of {pageCount}",
+
+        loadIndication: true,
+        loadIndicationDelay: 500,
+        loadMessage: "Please, wait...",
+        loadShading: true,
+
+        fields: [
+            {
+                name: "chkSelect", type: "checkbox", width: "25", title: "", align: "center",
+                headerTemplate: function (value, item) {
+                    return '<input type="checkbox" class="all-sel" />';
+                },
+                itemTemplate: function (value, item) {
+                    return '<input type="checkbox" value="' + item.JobID + '" class="row-sel" />';
                 }
-            });
-        });
+            },
+            {
+                name: "JobID", type: "number", width: "60", title: "JID",
+                itemTemplate: function (value, item) {
+                    return '<a href="' + rtProgressUrl + '?jobID=' + value + '" target="_blank">' + value + '</a>';
+                }
+            },
+            { name: "AppID", type: "text", width: "60" },
+            { name: "UserID", type: "number", width: "40", title: "UID" },
+            { name: "ProcessID", type: "number", width: "40", title: "PID" },
+            { name: "JobType", type: "text", width: "80", title: "Type" },
+            {
+                name: "JobName", type: "text", width: "100", title: "Name",
+                itemTemplate: function (value, item) {
+                    return '<a href="' + methodUrl + '?jobID=' + item.JobID + '" target="_blank">' + value + '</a>';
+                }
+            },
+            { name: "InvokeMeta", type: "text", visible: false },
+            { name: "Parameters", type: "text", visible: false },
+            { name: "Status", type: "number", visible: false},
+            { name: "StatusLabel", type: "text", width: "80", title: "Status" },
+            { name: "Percent", type: "text", width: "50", title: "%" },
+            { name: "Note", type: "longtext", width: "160" },
+            { name: "Data", type: "longtext", width: "140" },
+            { name: "Error", type: "longtext", width: "140" },
+            { name: "Start", type: "date", width: "80" },
+            { name: "End", type: "date", width: "80" },
+            { name: "Created", type: "date", width: "80" },
+        ],
+
+        autoload: true,
+        controller: {
+            loadData: function (filter) {
+                var d = $.Deferred();
+                $.ajax({
+                    type: "GET",
+                    url: readDataUrl,
+                    data: filter,
+                }).done(function (response) {
+                    d.resolve(response);
+                    return;
+                });
+                return d.promise();
+            }
+        }
+    });
+}
+
+function initCommands() {
+    $('#grid').on('click', 'input.all-sel', function () {
+        var that = $(this);
+        var checkboxes = that.closest('.jsgrid').find('input.row-sel')
+        checkboxes.prop("checked", that.prop("checked"));
+    });
 
     $('.command-bar a[data-key]').click(function () {
         var $this = $(this);
         var key = $this.attr('data-key');
         var action = $this.attr('data-action');
+        var grid = $('#grid');
         var ids;
         switch (key) {
             case 'refresh':
-                grid.dataSource.read();
+                grid.jsGrid('render');
                 break;
             case 'reset':
             case 'delete':
             case 'stop':
             case 'run':
-                ids = getSelectedRecords('#grid', 'JobID');
+                ids = getSelectedRecords('#grid');
                 if (confirm('Are you sure you want to ' + key.toUpperCase() + ' jobs?')) {
                     $.post(action, { "ids": ids }, function (result) {
-                        grid.dataSource.read();
+                        grid.jsGrid('render');
                     });
                 }
                 break;
             case 'cleanup':
                 if (confirm('Are you sure you want to ' + key.toUpperCase() + ' jobs?')) {
                     $.post(action, null, function (result) {
-                        grid.dataSource.read();
+                        grid.jsGrid('render');
                     });
                 }
                 break;
@@ -275,32 +192,15 @@ function initializeGrid() {
         return false;
     });
 
-
-}
-
-function getSelectedRecords(gridid, params) {
-    var grid = $(gridid).data("kendoGrid");
-    var arr = [];
-    var dataSource = grid.dataSource;
-    if ($.isArray(params)) {
-        grid.select().each(function () {
-            var item = dataSource.getByUid($(this).data('uid'));
-            var idlist = {};
-            for (var i = 0; i < params.length; i++) {
-                idlist[params[i]] = item[params[i]];
-            }
-            arr.push(idlist);
+    function getSelectedRecords(divSel) {
+        var selected = $(divSel + ' input.row-sel:checked');
+        var ids = [];
+        selected.each(function () {
+            ids.push($(this).val());
         });
-    } else {
-        grid.select().each(function () {
-            var item = dataSource.getByUid($(this).data('uid'));
-            arr.push(item[params]);
-        });
+
+        return ids;
     }
-
-    //console.log('getSelectedRecords: ' + JSON.stringify(arr)); //DEBUG
-
-    return arr;
 }
 
 </script>
