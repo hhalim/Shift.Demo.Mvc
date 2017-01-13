@@ -1,13 +1,13 @@
 ﻿using Global;
-using Kendo.Mvc.Extensions;
-using Kendo.Mvc.UI;
 using Shift;
 using Shift.Entities;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Data.SqlClient;
+
+using Dapper;
 
 namespace MyApp.Client.Controllers
 {
@@ -30,22 +30,21 @@ namespace MyApp.Client.Controllers
 
         public ActionResult ReadData(int? pageIndex, int? pageSize)
         {
-            IQueryable<JobView> query;
             var result = new List<JobView>();
             var totalCount = 0;
-            using (var db = new BGProcess(DBConstant.ConnectionName))
-            {
-                totalCount = (from p in db.JobView
-                              orderby p.AppID descending
-                              select p.JobID).Count();
-                query = (from p in db.JobView
-                         orderby p.AppID descending
-                         select p)
-                        .Skip((pageIndex.GetValueOrDefault() - 1) * pageSize.GetValueOrDefault())
-                        .Take(pageSize.GetValueOrDefault())
-                        ;
 
-                result = query.ToList();
+            using (var connection = new SqlConnection(DBConstant.ConnectionString))
+            {
+                connection.Open();
+                var offset = (pageIndex.GetValueOrDefault() - 1) * pageSize.GetValueOrDefault();
+                var sqlQuery = @"SELECT COUNT(JobID) FROM JobView;
+                                SELECT * FROM JobView ORDER BY AppID DESC
+                                OFFSET " + offset + " ROWS FETCH NEXT " + pageSize.GetValueOrDefault() + " ROWS ONLY;";
+                using (var multiResult = connection.QueryMultiple(sqlQuery))
+                {
+                    totalCount = multiResult.Read<int>().Single();
+                    result = multiResult.Read<JobView>().ToList();
+                }
             }
 
             //Merge the Cached progress with the data in DB

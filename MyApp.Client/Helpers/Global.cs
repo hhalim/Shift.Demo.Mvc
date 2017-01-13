@@ -9,6 +9,7 @@ namespace Global
     public static class DBConstant
     {
         public static string ConnectionName = "name=ShiftDBConnection";
+        public static string ConnectionString = ConfigurationManager.ConnectionStrings["ShiftDBConnection"].ConnectionString;
     }
 
 }

@@ -1,10 +1,4 @@
-﻿using Global;
-using Kendo.Mvc.Extensions;
-using Kendo.Mvc.UI;
-using Shift;
-using Shift.Entities;
-using System.Configuration;
-using System.Linq;
+﻿using Shift;
 using System.Web;
 using System.Web.Mvc;
 

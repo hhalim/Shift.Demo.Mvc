@@ -10,29 +10,29 @@
 
         <form action="@Url.Action("Add", "Job")" method="post" class="form">
             <div class="form-group">
-                <label>Process 1  </label>
+                <label>Job 1  </label>
                 <input type="text" value="1" name="p1Count" class="form-control input-sm" style="width: 60px; display: inline-block;" />
-                <span class="help-block">Process1.Run("Hello World!", progress)</span>
+                <span class="help-block">Job1.Start("Hello World!", progress)</span>
             </div>
             <div class="form-group">
-                <label>Process 2  </label>
+                <label>Job 2  </label>
                 <input type="text" value="1" name="p2Count" class="form-control input-sm" style="width: 60px; display: inline-block;" />
-                <span class="help-block">Process2.LoadWork(progress, 1)</span>
+                <span class="help-block">Job2.Start(progress, 1)</span>
             </div>
             <div class="form-group">
-                <label>Process 3 (simple Array)  </label>
+                <label>Job 3 (simple Array)  </label>
                 <input type="text" value="1" name="p3Count" class="form-control input-sm" style="width: 60px; display: inline-block;" />
-                <span class="help-block">Process3.Start(progress, simpleList)</span>
+                <span class="help-block">Job3.Start(progress, simpleList)</span>
             </div>
             <div class="form-group">
-                <label>Process 4 (complex Array) </label>
+                <label>Job 4 (complex Array) </label>
                 <input type="text" value="1" name="p4Count" class="form-control input-sm" style="width: 60px; display: inline-block;" />
-                <span class="help-block">Process4.MyMethod(progress, complexList)</span>
+                <span class="help-block">Job4.Start(progress, complexList)</span>
             </div>
             <div class="form-group">
-                <label>Process 5 (complex Object & Array) </label>
+                <label>Job 5 (complex Object & Array) </label>
                 <input type="text" value="1" name="p5Count" class="form-control input-sm" style="width: 60px; display: inline-block;" />
-                <span class="help-block">Process5.StartObject(progress, testData2)</span>
+                <span class="help-block">Job5.Start(progress, testData2)</span>
             </div>
             <div class="form-group">
                 <input type="submit" class="btn btn-default" value="Add" />

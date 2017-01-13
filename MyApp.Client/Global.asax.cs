@@ -25,16 +25,18 @@ namespace MyApp.Client
 
             //Shift
             var options = new Shift.Options();
-            options.AssemblyListPath = ConfigurationManager.AppSettings["AssemblyListPath"];
-            options.MaxRunnableJobs = Convert.ToInt32(ConfigurationManager.AppSettings["MaxRunableJobs"]);
-            options.ProcessID = Convert.ToInt32(ConfigurationManager.AppSettings["ShiftPID"]);
             options.DBConnectionString = ConfigurationManager.ConnectionStrings["ShiftDBConnection"].ConnectionString;
             options.CacheConfigurationString = ConfigurationManager.AppSettings["RedisConfiguration"];
-            //options.EncryptionKey = ConfigurationManager.AppSettings["ShiftEncryptionParametersKey"]; //optional, will encrypt parameters in DB if filled
 
-            Application["Shift.JobClient"] = new JobClient(options); //only the DBConnectionString and RedisConnectionString are required for Client's background job
+            options.AssemblyListPath = ConfigurationManager.AppSettings["AssemblyListPath"]; //Shift.Server
+            options.MaxRunnableJobs = Convert.ToInt32(ConfigurationManager.AppSettings["MaxRunableJobs"]); //Shift.Server
+            options.ProcessID = Convert.ToInt32(ConfigurationManager.AppSettings["ShiftPID"]); //Shift.Server
 
-            //Running the server in the same process as the client
+            options.EncryptionKey = ConfigurationManager.AppSettings["ShiftEncryptionParametersKey"]; //optional, will encrypt parameters in DB if exists
+
+            Application["Shift.JobClient"] = new JobClient(options); //only the DBConnectionString and CacheConfigurationString are required for Client's background job
+
+            //For this demo, we're running the background process server in the same process as the web client
             //It's better to run the server portion in a separate windows service or Azure WebJobs
             var jobServer = new Shift.JobServer(options);
             jobServer.Start();

@@ -50,7 +50,7 @@ namespace MyApp.Client.Controllers
                     jobClient.Add(appID, -1, jobType, () => job1.Start("Hello World!", progress));
                 }
 
-                message += p1Count + " - Process1 job(s) added to queue. <br/>";
+                message += p1Count + " - Job1 added to background server list. <br/>";
             }
 
             if (p2Count > 0)
@@ -62,7 +62,7 @@ namespace MyApp.Client.Controllers
                     jobClient.Add(appID, -1, jobType, () => job2.Start(progress, 1));
                 }
 
-                message += p2Count + " - Process2 job(s) added to queue. <br/>";
+                message += p2Count + " - Job2 added to background server list. <br/>";
             }
 
             if (p3Count > 0)
@@ -80,7 +80,7 @@ namespace MyApp.Client.Controllers
                     jobClient.Add(appID, -1, jobType, () => job3.Start(progress, simpleList));
                 }
 
-                message += p3Count + " - Process3 job(s) added to queue. <br/>";
+                message += p3Count + " - Job3 added to background server list. <br/>";
             }
 
             if (p4Count > 0)
@@ -101,7 +101,7 @@ namespace MyApp.Client.Controllers
                     jobClient.Add(appID, -1, jobType, () => job4.Start(progress, complexList));
                 }
 
-                message += p4Count + " - Process4 job(s) added to queue. <br/>";
+                message += p4Count + " - Job4 added to background server list. <br/>";
             }
 
             if (p5Count > 0)
@@ -133,7 +133,7 @@ namespace MyApp.Client.Controllers
                     jobClient.Add(appID, -1, jobType, () => job5.Start(progress, testData2));
                 }
 
-                message += p5Count + " - Process5 job(s) added to queue. <br/>";
+                message += p5Count + " - Job5 added to background server list. <br/>";
             }
 
             ViewBag.Message = message;

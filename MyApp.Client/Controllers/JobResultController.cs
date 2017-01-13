@@ -1,13 +1,12 @@
-﻿using Global;
-using Kendo.Mvc.Extensions;
-using Kendo.Mvc.UI;
-using Shift;
+﻿using Shift;
 using Shift.Entities;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Data.SqlClient;
+using Dapper;
+using Global;
+using System.Linq;
 
 namespace MyApp.Client.Controllers
 {
@@ -32,19 +31,18 @@ namespace MyApp.Client.Controllers
         {
             var result = new List<JobResult>();
             var totalCount = 0;
-            using (var db = new BGProcess(DBConstant.ConnectionName))
+
+            using (var connection = new SqlConnection(DBConstant.ConnectionString))
             {
-                totalCount = (from p in db.JobResult
-                              select p.JobResultID).Count();
-                IQueryable<JobResult> query = (from p in db.JobResult
-                                               orderby p.JobResultID ascending
-                                               select p)
-                                                .Skip((pageIndex.GetValueOrDefault() - 1) * pageSize.GetValueOrDefault())
-                                                .Take(pageSize.GetValueOrDefault());
-                result = query.ToList();
-                foreach (JobResult row in result)
+                connection.Open();
+                var offset = (pageIndex.GetValueOrDefault() - 1) * pageSize.GetValueOrDefault();
+                var sqlQuery = @"SELECT COUNT(JobResultID) FROM JobResult;
+                                SELECT JobResultID, JobID, ExternalID, Name, ContentType FROM JobResult ORDER BY JobResultID ASC
+                                OFFSET " + offset + " ROWS FETCH NEXT " + pageSize.GetValueOrDefault() + " ROWS ONLY;";
+                using (var multiResult = connection.QueryMultiple(sqlQuery))
                 {
-                    row.BinaryContent = null; //don't want to send this to browser
+                    totalCount = multiResult.Read<int>().Single();
+                    result = multiResult.Read<JobResult>().ToList();
                 }
             }
 
