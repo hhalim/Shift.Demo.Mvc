@@ -26,6 +26,8 @@ namespace MyApp.Client
             //Shift
             var options = new Shift.Options();
             options.DBConnectionString = ConfigurationManager.ConnectionStrings["ShiftDBConnection"].ConnectionString;
+
+            options.UseCache = true;
             options.CacheConfigurationString = ConfigurationManager.AppSettings["RedisConfiguration"];
 
             options.AssemblyListPath = ConfigurationManager.AppSettings["AssemblyListPath"]; //Shift.Server
@@ -37,7 +39,7 @@ namespace MyApp.Client
             Application["Shift.JobClient"] = new JobClient(options); //only the DBConnectionString and CacheConfigurationString are required for Client's background job
 
             //For this demo, we're running the background process server in the same process as the web client
-            //It's better to run the server portion in a separate windows service or Azure WebJobs
+            //It's better to run the server portion in a separate windows service or Azure WebJob or another app.
             var jobServer = new Shift.JobServer(options);
             jobServer.Start();
             Application["Shift.JobServer"] = jobServer;
