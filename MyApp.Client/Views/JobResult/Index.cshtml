@@ -59,7 +59,7 @@ function initializeGrid() {
     longText.prototype = new jsGrid.Field({
         itemTemplate: function (value, item) {
             if (value)
-                return '<div style="overflow-y: auto; max-height: 60px; word-break:break-all;">' + value + '</div>';
+                return '<div style="overflow-y: auto; max-height: 60px;">' + value + '</div>';
             else
                 return;
         }

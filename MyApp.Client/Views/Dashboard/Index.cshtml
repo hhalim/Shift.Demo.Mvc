@@ -13,18 +13,18 @@
             <a href="#" class="btn btn-default" data-action="@Url.Action("Stop", "Dashboard")" data-key="stop">Stop</a>
             <a href="#" class="btn btn-default" data-action="@Url.Action("Reset", "Dashboard")" data-key="reset">Reset</a>
             <a href="#" class="btn btn-default" data-action="@Url.Action("Delete", "Dashboard")" data-key="delete">Delete</a>
+            <a href="#" class="btn btn-default" data-action="@Url.Action("RunNow", "Dashboard")" data-key="runnow">Run Now</a>
+            <a href="#" class="btn btn-default" data-action="@Url.Action("RunSelected", "Dashboard")" data-key="run-selected">Run Selected</a>
         </div>
     </div>
 
-    @if (Html.IsDebug() || HttpContext.Current.IsDebuggingEnabled)
-    {
-        <div class="col-sm-6">
-            <div class="command-bar btn-group pull-right">
-                <a href="#" class="btn btn-default" data-action="@Url.Action("Start", "Dashboard")" data-key="run">Start</a>
-                <a href="#" class="btn btn-default" data-action="@Url.Action("CleanUp", "Dashboard")" data-key="cleanup">Clean Up</a>
-            </div>
+    <div class="col-sm-6">
+        <div class="command-bar btn-group pull-right">
+            <a href="#" class="btn btn-default" data-action="@Url.Action("RunServer", "Dashboard")" data-key="run-server">Run Server</a>
+            <a href="#" class="btn btn-default" data-action="@Url.Action("StopServer", "Dashboard")" data-key="stop-server">Stop Server</a>
+            <a href="#" class="btn btn-default" data-action="@Url.Action("CleanUp", "Dashboard")" data-key="cleanup">Server Clean Up</a>
         </div>
-    }
+    </div>
 </div>
 
 <div class="row" style="margin-top: 15px;">
@@ -70,7 +70,7 @@ function initializeGrid() {
     longText.prototype = new jsGrid.Field({
         itemTemplate: function (value, item) {
             if (value)
-                return '<div style="overflow-y: auto; max-height: 60px; word-break:break-all;">' + value + '</div>';
+                return '<div style="overflow-y: auto; max-height: 60px;">' + value + '</div>';
             else
                 return;
         }
@@ -107,14 +107,14 @@ function initializeGrid() {
                 }
             },
             {
-                name: "JobID", type: "number", width: "60", title: "JID",
+                name: "JobID", type: "number", width: "60", 
                 itemTemplate: function (value, item) {
                     return '<a href="' + rtProgressUrl + '?jobID=' + value + '" target="_blank">' + value + '</a>';
                 }
             },
-            { name: "AppID", type: "text", width: "60" },
-            { name: "UserID", type: "number", width: "40", title: "UID" },
-            { name: "ProcessID", type: "number", width: "40", title: "PID" },
+            { name: "AppID", type: "longtext", width: "60" },
+            { name: "UserID", type: "text", width: "40", title: "UID" },
+            { name: "ProcessID", type: "longtext", width: "60", title: "PID" },
             { name: "JobType", type: "text", width: "80", title: "Type" },
             {
                 name: "JobName", type: "text", width: "100", title: "Name",
@@ -124,8 +124,9 @@ function initializeGrid() {
             },
             { name: "InvokeMeta", type: "text", visible: false },
             { name: "Parameters", type: "text", visible: false },
-            { name: "Status", type: "number", visible: false},
-            { name: "StatusLabel", type: "text", width: "80", title: "Status" },
+            { name: "Status", type: "number", visible: false },
+            { name: "Command", type: "text", width: "70", visible: true },
+            { name: "StatusLabel", type: "text", width: "70", title: "Status" },
             { name: "Percent", type: "text", width: "50", title: "%" },
             { name: "Note", type: "longtext", width: "160" },
             { name: "Data", type: "longtext", width: "140" },
@@ -173,7 +174,8 @@ function initCommands() {
             case 'reset':
             case 'delete':
             case 'stop':
-            case 'run':
+            case 'runnow':
+            case 'run-selected':
                 ids = getSelectedRecords('#grid');
                 if (confirm('Are you sure you want to ' + key.toUpperCase() + ' jobs?')) {
                     $.post(action, { "ids": ids }, function (result) {
@@ -185,6 +187,24 @@ function initCommands() {
                 if (confirm('Are you sure you want to ' + key.toUpperCase() + ' jobs?')) {
                     $.post(action, null, function (result) {
                         grid.jsGrid('render');
+                    });
+                }
+                break;
+            case 'run-server':
+                ids = getSelectedRecords('#grid');
+                if (confirm('Are you sure you want to ' + key.toUpperCase() + '?')) {
+                    $.post(action, null, function (result) {
+                        grid.jsGrid('render');
+                        alert('Shift Server is now running.');
+                    });
+                }
+                break;
+            case 'stop-server':
+                ids = getSelectedRecords('#grid');
+                if (confirm('Are you sure you want to ' + key.toUpperCase() + '?')) {
+                    $.post(action, null, function (result) {
+                        grid.jsGrid('render');
+                        alert('Shift Server stopped.');
                     });
                 }
                 break;

@@ -50,7 +50,7 @@ function initializeGrid() {
     longText.prototype = new jsGrid.Field({
         itemTemplate: function (value, item) {
             if (value)
-                return '<div style="overflow-y: auto; max-height: 60px; word-break:break-all;">' + value + '</div>';
+                return '<div style="overflow-y: auto; max-height: 60px;">' + value + '</div>';
             else
                 return;
         }
@@ -77,10 +77,10 @@ function initializeGrid() {
         loadShading: true,
 
         fields: [
-            { name: "JobID", type: "number", width: "40", title: "JID" },
-            { name: "AppID", type: "text", width: "50" },
-            { name: "UserID", type: "number", width: "40", title: "UID" },
-            { name: "ProcessID", type: "number", width: "40", title: "PID" },
+            { name: "JobID", type: "number", width: "40", title: "JobID" },
+            { name: "AppID", type: "longtext", width: "50" },
+            { name: "UserID", type: "text", width: "40", title: "UID" },
+            { name: "ProcessID", type: "longtext", width: "60", title: "PID" },
             { name: "StatusLabel", type: "text", width: "80", title: "Status" },
             { name: "Percent", type: "text", width: "50", title: "%" },
             { name: "Note", type: "longtext", width: "180" },

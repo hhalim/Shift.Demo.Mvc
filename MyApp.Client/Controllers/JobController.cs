@@ -35,8 +35,7 @@ namespace MyApp.Client.Controllers
 
         public ActionResult Add(int? p0Count, int? p1Count, int? p2Count, int? p3Count, int? p4Count, int? p5Count)
         {
-            var jobType = "test.job";
-            var appID = ConfigurationManager.AppSettings["UniqueApplicationIdentifier"];
+            var appID = ConfigurationManager.AppSettings["ApplicationID"];
             if (string.IsNullOrWhiteSpace(appID))
                 appID = "/Software/BGTest";
 
@@ -47,7 +46,7 @@ namespace MyApp.Client.Controllers
                 {
                     var job1 = new Job1();
                     var progress = new SynchronousProgress<ProgressInfo>();
-                    jobClient.Add(appID, -1, jobType, () => job1.Start("Hello World!", progress));
+                    jobClient.Add(appID, () => job1.Start("Hello World!", progress));
                 }
 
                 message += p1Count + " - Job1 added to background server list. <br/>";
@@ -59,7 +58,7 @@ namespace MyApp.Client.Controllers
                 {
                     var job2 = new Job2();
                     var progress = new SynchronousProgress<ProgressInfo>();
-                    jobClient.Add(appID, -1, jobType, () => job2.Start(progress, 1));
+                    jobClient.Add(appID, () => job2.Start(progress, 1));
                 }
 
                 message += p2Count + " - Job2 added to background server list. <br/>";
@@ -77,7 +76,7 @@ namespace MyApp.Client.Controllers
                 {
                     var job3 = new Job3();
                     var progress = new SynchronousProgress<ProgressInfo>();
-                    jobClient.Add(appID, -1, jobType, () => job3.Start(progress, simpleList));
+                    jobClient.Add(appID, () => job3.Start(progress, simpleList));
                 }
 
                 message += p3Count + " - Job3 added to background server list. <br/>";
@@ -98,7 +97,7 @@ namespace MyApp.Client.Controllers
                 {
                     var job4 = new Job4();
                     var progress = new SynchronousProgress<ProgressInfo>();
-                    jobClient.Add(appID, -1, jobType, () => job4.Start(progress, complexList));
+                    jobClient.Add(appID, () => job4.Start(progress, complexList));
                 }
 
                 message += p4Count + " - Job4 added to background server list. <br/>";
@@ -130,7 +129,7 @@ namespace MyApp.Client.Controllers
                 {
                     var job5 = new Job5();
                     var progress = new SynchronousProgress<ProgressInfo>();
-                    jobClient.Add(appID, -1, jobType, () => job5.Start(progress, testData2));
+                    jobClient.Add(appID, () => job5.Start(progress, testData2));
                 }
 
                 message += p5Count + " - Job5 added to background server list. <br/>";

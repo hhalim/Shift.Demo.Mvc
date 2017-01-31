@@ -23,25 +23,29 @@ namespace MyApp.Client
 
             AutofacConfiguration();
 
-            //Shift
-            var options = new Shift.Options();
-            options.DBConnectionString = ConfigurationManager.ConnectionStrings["ShiftDBConnection"].ConnectionString;
+            //Shift Client
+            var clientConfig = new Shift.ClientConfig();
+            clientConfig.DBConnectionString = ConfigurationManager.ConnectionStrings["ShiftDBConnection"].ConnectionString;
+            clientConfig.UseCache = Convert.ToBoolean(ConfigurationManager.AppSettings["UseCache"]);
+            clientConfig.CacheConfigurationString = ConfigurationManager.AppSettings["RedisConfiguration"]; //required only if UseCache = true
+            clientConfig.EncryptionKey = ConfigurationManager.AppSettings["ShiftEncryptionParametersKey"]; //optional, will encrypt parameters in DB if exists
+            Application["Shift.JobClient"] = new JobClient(clientConfig); //only the DBConnectionString and CacheConfigurationString are required for Client's background job
 
-            options.UseCache = true;
-            options.CacheConfigurationString = ConfigurationManager.AppSettings["RedisConfiguration"];
-
-            options.AssemblyListPath = ConfigurationManager.AppSettings["AssemblyListPath"]; //Shift.Server
-            options.MaxRunnableJobs = Convert.ToInt32(ConfigurationManager.AppSettings["MaxRunableJobs"]); //Shift.Server
-            options.ProcessID = Convert.ToInt32(ConfigurationManager.AppSettings["ShiftPID"]); //Shift.Server
-
-            options.EncryptionKey = ConfigurationManager.AppSettings["ShiftEncryptionParametersKey"]; //optional, will encrypt parameters in DB if exists
-
-            Application["Shift.JobClient"] = new JobClient(options); //only the DBConnectionString and CacheConfigurationString are required for Client's background job
+            //Shift Server
+            var serverConfig = new Shift.ServerConfig();
+            serverConfig.DBConnectionString = ConfigurationManager.ConnectionStrings["ShiftDBConnection"].ConnectionString;
+            serverConfig.UseCache = Convert.ToBoolean(ConfigurationManager.AppSettings["UseCache"]);
+            serverConfig.CacheConfigurationString = ConfigurationManager.AppSettings["RedisConfiguration"]; //required only if UseCache = true
+            serverConfig.EncryptionKey = ConfigurationManager.AppSettings["ShiftEncryptionParametersKey"]; //optional, will encrypt parameters in DB if exists
+            serverConfig.AssemblyListPath = ConfigurationManager.AppSettings["AssemblyListPath"]; 
+            serverConfig.MaxRunnableJobs = Convert.ToInt32(ConfigurationManager.AppSettings["MaxRunableJobs"]); 
+            serverConfig.ProcessID = ConfigurationManager.AppSettings["ShiftPID"];
+            //serverConfig.ServerTimerInterval = 5000; //optional: default every 5 sec for server running jobs
+            //serverConfig.ServerTimerInterval2 = 10000; //optional: default every 10 sec for server CleanUp()
 
             //For this demo, we're running the background process server in the same process as the web client
-            //It's better to run the server portion in a separate windows service or Azure WebJob or another app.
-            var jobServer = new Shift.JobServer(options);
-            jobServer.Start();
+            //It's recommended to run the server in a separate process, such as windows service or Azure WebJob or another app.
+            var jobServer = new Shift.JobServer(serverConfig);
             Application["Shift.JobServer"] = jobServer;
         }
 

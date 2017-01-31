@@ -71,10 +71,10 @@ function getProgress(jobID) {
         if (jobj) {
             $('.status').text(jobj.StatusLabel);
             $('.note').html(jobj.Note);
-            $('.percent').text(jobj.Percent);
-            $('.data').text(jobj.Data);
-            $('.updated').text(jobj.Updated);
-            $('.error').text(jobj.Error);
+            $('.percent').text(jobj.Percent != null ? jobj.Percent : '0');
+            $('.data').text(jobj.Data != null ? jobj.Data : '');
+            $('.updated').text(jobj.Updated != null ? jobj.Updated : '');
+            $('.error').text(jobj.Error != null ? jobj.Error : '');
         }
     });
 }

@@ -26,3 +26,8 @@ textarea {
 
 .nav-brand img {
 }
+
+/* jsGrid override */
+.jsgrid-cell {
+    padding: 0.25em;
+}

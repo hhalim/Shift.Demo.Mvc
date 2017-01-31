@@ -99,9 +99,6 @@ namespace MyApp.Client.Controllers
             return Json(true);
         }
 
-
-
-
         #region Shift Actions
         public ActionResult Stop(List<int> ids)
         {
@@ -117,13 +114,38 @@ namespace MyApp.Client.Controllers
             return Json(true);
         }
 
-        public ActionResult Start(List<int> ids)
+        public ActionResult RunNow(List<int> ids)
+        {
+            if (ids == null)
+                return Json(false);
+
+            //Set command to 'run-now', wait for RunServer to pickup and run it
+            jobClient.SetCommandRunNow(ids);
+
+            return Json(true);
+        }
+
+        public ActionResult RunSelected(List<int> ids)
         {
             if (ids == null)
                 return Json(false);
 
             //Jobs run through this function will be running under the IIS Process!
-            jobServer.StartJobs(ids); //Try to start the selected jobs, ignoring MaxRunableJobs 
+            jobServer.RunJobs(ids); //Run the selected jobs, ignoring MaxRunableJobs 
+
+            return Json(true);
+        }
+
+        public ActionResult RunServer()
+        {
+            //Jobs run through this function will be running under the IIS Process!
+            jobServer.RunServer(); //Run jobs server, use the MaxRunableJobs setting
+            return Json(true);
+        }
+
+        public ActionResult StopServer()
+        {
+            jobServer.StopServer(); 
 
             return Json(true);
         }
