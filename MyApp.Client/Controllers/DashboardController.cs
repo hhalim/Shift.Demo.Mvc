@@ -125,17 +125,6 @@ namespace MyApp.Client.Controllers
             return Json(true);
         }
 
-        public ActionResult RunSelected(List<int> ids)
-        {
-            if (ids == null)
-                return Json(false);
-
-            //Jobs run through this function will be running under the IIS Process!
-            jobServer.RunJobs(ids); //Run the selected jobs, ignoring MaxRunableJobs 
-
-            return Json(true);
-        }
-
         public ActionResult RunServer()
         {
             //Jobs run through this function will be running under the IIS Process!
