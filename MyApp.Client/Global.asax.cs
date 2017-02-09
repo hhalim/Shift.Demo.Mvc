@@ -37,9 +37,10 @@ namespace MyApp.Client
             serverConfig.UseCache = Convert.ToBoolean(ConfigurationManager.AppSettings["UseCache"]);
             serverConfig.CacheConfigurationString = ConfigurationManager.AppSettings["RedisConfiguration"]; //required only if UseCache = true
             serverConfig.EncryptionKey = ConfigurationManager.AppSettings["ShiftEncryptionParametersKey"]; //optional, will encrypt parameters in DB if exists
-            serverConfig.AssemblyListPath = ConfigurationManager.AppSettings["AssemblyListPath"]; 
             serverConfig.MaxRunnableJobs = Convert.ToInt32(ConfigurationManager.AppSettings["MaxRunableJobs"]); 
             serverConfig.ProcessID = ConfigurationManager.AppSettings["ShiftPID"];
+            //serverConfig.AssemblyFolder = ConfigurationManager.AppSettings["AssemblyFolder"];
+            //serverConfig.AssemblyListPath = ConfigurationManager.AppSettings["AssemblyListPath"]; 
             //serverConfig.ServerTimerInterval = 5000; //optional: default every 5 sec for server running jobs
             //serverConfig.ServerTimerInterval2 = 10000; //optional: default every 10 sec for server CleanUp()
 
