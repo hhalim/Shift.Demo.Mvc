@@ -103,38 +103,6 @@ namespace MyApp.Client.Controllers
                 message += p4Count + " - Job4 added to background server list. <br/>";
             }
 
-            if (p5Count > 0)
-            {
-                var myList = new List<int>();
-                for (var i = 1; i <= 100; i++)
-                {
-                    myList.Add(i);
-                }
-
-                var testData2 = new TestData2();
-                testData2.MyAppStatus = MyAppStatus.Suspend;
-                testData2.MyList = myList;
-
-                var complexList = new List<TestData>();
-                for (var i = 1; i <= 100; i++)
-                {
-                    var newData = new TestData();
-                    newData.MyNumber = i;
-                    newData.MyString = "mystring " + i;
-                    complexList.Add(newData);
-                }
-                testData2.TestDataList = complexList;
-
-                for (var i = 0; i < p5Count; i++)
-                {
-                    var job5 = new Job5();
-                    var progress = new SynchronousProgress<ProgressInfo>();
-                    jobClient.Add(appID, () => job5.Start(progress, testData2));
-                }
-
-                message += p5Count + " - Job5 added to background server list. <br/>";
-            }
-
             ViewBag.Message = message;
 
             return View("Index");

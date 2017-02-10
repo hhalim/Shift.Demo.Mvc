@@ -158,7 +158,6 @@
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MethodController.cs" />
-    <Compile Include="Controllers\JobResultController.cs" />
     <Compile Include="Controllers\ProgressController.cs" />
     <Compile Include="Controllers\RTProgressController.cs" />
     <Compile Include="Global.asax.cs">
@@ -227,7 +226,6 @@
     <Content Include="Views\Job\Index.cshtml" />
     <Content Include="Views\Progress\Index.cshtml" />
     <Content Include="Views\Method\Index.cshtml" />
-    <Content Include="Views\JobResult\Index.cshtml" />
     <Content Include="Views\RTProgress\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
