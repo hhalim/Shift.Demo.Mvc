@@ -70,13 +70,13 @@
       <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Shift, Version=0.5.6239.14923, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Shift, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\libs\Shift\Shift.dll</HintPath>
+      <HintPath>..\..\Shift.WebJob\libs\Shift.dll</HintPath>
     </Reference>
     <Reference Include="Shift.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\libs\Shift\Shift.Entities.dll</HintPath>
+      <HintPath>..\..\Shift.WebJob\libs\Shift.Entities.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -246,6 +246,9 @@
       <Project>{8a7ff490-9117-4881-a46a-5880585f48a4}</Project>
       <Name>MyApp.BusinessLayer</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

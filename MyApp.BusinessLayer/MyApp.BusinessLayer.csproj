@@ -36,7 +36,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Shift.Entities">
-      <HintPath>..\Libs\Shift\Shift.Entities.dll</HintPath>
+      <HintPath>..\..\Shift.WebJob\libs\Shift.Entities.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
