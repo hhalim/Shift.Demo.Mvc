@@ -7,6 +7,7 @@ using Shift;
 using System.Web.Http;
 using Autofac;
 using Autofac.Integration.Mvc;
+using System.Collections.Generic;
 
 namespace MyApp.Client
 {
@@ -39,6 +40,10 @@ namespace MyApp.Client
             serverConfig.EncryptionKey = ConfigurationManager.AppSettings["ShiftEncryptionParametersKey"]; //optional, will encrypt parameters in DB if exists
             serverConfig.MaxRunnableJobs = Convert.ToInt32(ConfigurationManager.AppSettings["MaxRunableJobs"]); 
             serverConfig.ProcessID = ConfigurationManager.AppSettings["ShiftPID"];
+
+            serverConfig.AutoDeletePeriod = Convert.ToInt32(ConfigurationManager.AppSettings["AutoDeletePeriod"]);
+            serverConfig.AutoDeleteStatus = new List<JobStatus?> { JobStatus.Completed, JobStatus.Error }; //Auto delete only the jobs that had Stopped or with Error
+
             //serverConfig.AssemblyFolder = ConfigurationManager.AppSettings["AssemblyFolder"];
             //serverConfig.AssemblyListPath = ConfigurationManager.AppSettings["AssemblyListPath"]; 
             //serverConfig.ServerTimerInterval = 5000; //optional: default every 5 sec for server running jobs

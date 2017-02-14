@@ -43,7 +43,9 @@ namespace MyApp.Client.Controllers
                 connection.Open();
                 var offset = (pageIndex.GetValueOrDefault() - 1) * pageSize.GetValueOrDefault();
                 var sqlQuery = @"SELECT COUNT(JobID) FROM JobView;
-                                SELECT * FROM JobView ORDER BY AppID DESC
+                                SELECT * 
+                                FROM JobView jv 
+                                ORDER BY jv.Created, jv.JobID
                                 OFFSET " + offset + " ROWS FETCH NEXT " + pageSize.GetValueOrDefault() + " ROWS ONLY;";
                 using (var multiResult = connection.QueryMultiple(sqlQuery))
                 {
