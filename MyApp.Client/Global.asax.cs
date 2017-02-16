@@ -41,8 +41,9 @@ namespace MyApp.Client
             serverConfig.MaxRunnableJobs = Convert.ToInt32(ConfigurationManager.AppSettings["MaxRunableJobs"]); 
             serverConfig.ProcessID = ConfigurationManager.AppSettings["ShiftPID"];
 
-            serverConfig.AutoDeletePeriod = Convert.ToInt32(ConfigurationManager.AppSettings["AutoDeletePeriod"]);
-            serverConfig.AutoDeleteStatus = new List<JobStatus?> { JobStatus.Completed, JobStatus.Error }; //Auto delete only the jobs that had Stopped or with Error
+            var autoDeletePeriod = ConfigurationManager.AppSettings["AutoDeletePeriod"];
+            serverConfig.AutoDeletePeriod = string.IsNullOrWhiteSpace(autoDeletePeriod) ? null : (int?)Convert.ToInt32(autoDeletePeriod);
+            serverConfig.AutoDeleteStatus = new List<JobStatus?> { JobStatus.Completed }; //Auto delete only the jobs that had Stopped or with Error
 
             //serverConfig.AssemblyFolder = ConfigurationManager.AppSettings["AssemblyFolder"];
             //serverConfig.AssemblyListPath = ConfigurationManager.AppSettings["AssemblyListPath"]; 
