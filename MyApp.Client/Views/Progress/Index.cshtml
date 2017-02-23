@@ -40,7 +40,7 @@ function initializeGrid() {
             } else {
                 return;
             }
-        },
+        }
     });
     jsGrid.fields.date = dateField;
 
@@ -87,7 +87,7 @@ function initializeGrid() {
             { name: "Error", type: "longtext", width: "140" },
             { name: "Start", type: "date", width: "80" },
             { name: "End", type: "date", width: "80" },
-            { name: "Created", type: "date", width: "80" },
+            { name: "Created", type: "date", width: "80" }
         ],
 
         autoload: true,
@@ -95,9 +95,10 @@ function initializeGrid() {
             loadData: function (filter) {
                 var d = $.Deferred();
                 $.ajax({
+                    cache: false,
                     type: "GET",
                     url: readDataUrl,
-                    data: filter,
+                    data: filter
                 }).done(function (response) {
                     d.resolve(response);
                     return;

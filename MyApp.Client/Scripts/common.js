@@ -1,18 +1,25 @@
-﻿//Allows using console.log with no error for any browser
-if (!window.console) {
-    (function () {
-        var names = ["log", "debug", "info", "warn", "error",
-            "assert", "dir", "dirxml", "group", "groupEnd", "time",
-            "timeEnd", "count", "trace", "profile", "profileEnd"],
-            i, l = names.length;
+﻿// Avoid `console` errors in browsers that lack a console.
+(function () {
+    var method;
+    var noop = function () { };
+    var methods = [
+        'assert', 'clear', 'count', 'debug', 'dir', 'dirxml', 'error',
+        'exception', 'group', 'groupCollapsed', 'groupEnd', 'info', 'log',
+        'markTimeline', 'profile', 'profileEnd', 'table', 'time', 'timeEnd',
+        'timeline', 'timelineEnd', 'timeStamp', 'trace', 'warn'
+    ];
+    var length = methods.length;
+    var console = (window.console = window.console || {});
 
-        window.console = {};
+    while (length--) {
+        method = methods[length];
 
-        for (i = 0; i < l; i++) {
-            window.console[names[i]] = function () { };
+        // Only stub undefined methods.
+        if (!console[method]) {
+            console[method] = noop;
         }
-    }());
-}
+    }
+}());
 
 /*
 Convert string value to JSON object.
