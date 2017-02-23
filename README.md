@@ -3,8 +3,8 @@ A Shift client running in ASP.NET MVC web app. This demo demonstrates the Shift 
 
 ## Quick Startup
 - Run the sql script to create Shift database in [/setup/create_db.sql](https://github.com/hhalim/Shift.Demo.Mvc/blob/master/setup/create_db.sql). 
-- If you want to use Redis cache, setup and create a Redis instance.
-- Open the solution in Visual Studio, update the Web.config connection string and cache.
+- If you want to use Redis cache, setup and create a Redis instance. Refer to [Shift Quick Setup](https://github.com/hhalim/Shift/wiki/Quick-Start#infrastructure-setup) for link to Redis windows MSI installation package.
+- Open the solution in Visual Studio, update the Web.config connection string and cache to match your installation.
 ```
 <connectionStrings>
   <add name="ShiftDBConnection" connectionString="Data Source=localhost\SQL2014;Initial Catalog=ShiftJobsDB;Integrated Security=SSPI;" providerName="System.Data.SqlClient" />
