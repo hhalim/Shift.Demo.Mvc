@@ -46,6 +46,9 @@
             <label>Error:</label> <span>@job.Error</span>
         </p>
         <p>
+            <label>Score:</label> <span>@job.Score</span>
+        </p>
+        <p>
             <label>Start:</label> <span>@(job.Start == null ? "" : job.Start.GetValueOrDefault().ToString("MM/dd/yyyy hh:mm tt"))</span>
         </p>
         <p>

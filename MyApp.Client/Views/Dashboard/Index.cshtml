@@ -10,10 +10,10 @@
     <div class="col-sm-6">
         <div class="command-bar btn-group">
             <a href="#" class="btn btn-default" data-action="" data-key="refresh">Refresh</a>
-            <a href="#" class="btn btn-default" data-action="@Url.Action("Stop", "Dashboard")" data-key="stop">Stop</a>
             <a href="#" class="btn btn-default" data-action="@Url.Action("Reset", "Dashboard")" data-key="reset">Reset</a>
             <a href="#" class="btn btn-default" data-action="@Url.Action("Delete", "Dashboard")" data-key="delete">Delete</a>
-            <a href="#" class="btn btn-default" data-action="@Url.Action("RunNow", "Dashboard")" data-key="runnow">Run Now</a>
+            <a href="#" class="btn btn-default" data-action="@Url.Action("Stop", "Dashboard")" data-key="stop">Mark as Stop</a>
+            <a href="#" class="btn btn-default" data-action="@Url.Action("RunNow", "Dashboard")" data-key="runnow">Mark as Run-Now</a>
         </div>
     </div>
 
@@ -130,6 +130,7 @@ function initializeGrid() {
             { name: "Note", type: "longtext", width: "160" },
             { name: "Data", type: "longtext", width: "140" },
             { name: "Error", type: "longtext", width: "140" },
+            { name: "Score", type: "number", width: "40" },
             { name: "Start", type: "date", width: "80" },
             { name: "End", type: "date", width: "80" },
             { name: "Created", type: "date", width: "80" }

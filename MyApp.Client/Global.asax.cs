@@ -30,6 +30,7 @@ namespace MyApp.Client
             clientConfig.UseCache = Convert.ToBoolean(ConfigurationManager.AppSettings["UseCache"]);
             clientConfig.CacheConfigurationString = ConfigurationManager.AppSettings["RedisConfiguration"]; //required only if UseCache = true
             clientConfig.EncryptionKey = ConfigurationManager.AppSettings["ShiftEncryptionParametersKey"]; //optional, will encrypt parameters in DB if exists
+            clientConfig.StorageMode = ConfigurationManager.AppSettings["StorageMode"];
             Application["Shift.JobClient"] = new JobClient(clientConfig); //only the DBConnectionString and CacheConfigurationString are required for Client's background job
 
             //Shift Server
@@ -40,10 +41,12 @@ namespace MyApp.Client
             serverConfig.EncryptionKey = ConfigurationManager.AppSettings["ShiftEncryptionParametersKey"]; //optional, will encrypt parameters in DB if exists
             serverConfig.MaxRunnableJobs = Convert.ToInt32(ConfigurationManager.AppSettings["MaxRunableJobs"]); 
             serverConfig.ProcessID = ConfigurationManager.AppSettings["ShiftPID"];
+            serverConfig.StorageMode = ConfigurationManager.AppSettings["StorageMode"];
 
             var autoDeletePeriod = ConfigurationManager.AppSettings["AutoDeletePeriod"];
             serverConfig.AutoDeletePeriod = string.IsNullOrWhiteSpace(autoDeletePeriod) ? null : (int?)Convert.ToInt32(autoDeletePeriod);
             serverConfig.AutoDeleteStatus = new List<JobStatus?> { JobStatus.Completed }; //Auto delete only the jobs that had Stopped or with Error
+            serverConfig.ProgressDBInterval = TimeSpan.Parse(ConfigurationManager.AppSettings["ProgressDBInterval"]); //Interval when progress is updated in main DB
 
             //serverConfig.AssemblyFolder = ConfigurationManager.AppSettings["AssemblyFolder"];
             //serverConfig.AssemblyListPath = ConfigurationManager.AppSettings["AssemblyListPath"]; 

@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using System.Data.SqlClient;
 
 using Dapper;
+using System;
 
 namespace MyApp.Client.Controllers
 {
@@ -30,46 +31,10 @@ namespace MyApp.Client.Controllers
 
         public ActionResult ReadData(int? pageIndex, int? pageSize)
         {
-            var result = new List<JobView>();
-            var totalCount = 0;
-
-            using (var connection = new SqlConnection(DBConstant.ConnectionString))
-            {
-                connection.Open();
-                var offset = (pageIndex.GetValueOrDefault() - 1) * pageSize.GetValueOrDefault();
-                var sqlQuery = @"SELECT COUNT(JobID) FROM JobView;
-                                SELECT * 
-                                FROM JobView jv 
-                                ORDER BY jv.Created, jv.JobID
-                                OFFSET " + offset + " ROWS FETCH NEXT " + pageSize.GetValueOrDefault() + " ROWS ONLY;";
-                using (var multiResult = connection.QueryMultiple(sqlQuery))
-                {
-                    totalCount = multiResult.Read<int>().Single();
-                    result = multiResult.Read<JobView>().ToList();
-                }
-            }
-
-            //Merge the Cached progress with the data in DB
-            foreach (JobView row in result)
-            {
-                if (row.Status == JobStatus.Running)
-                {
-                    var cached = jobClient.GetCachedProgress(row.JobID);
-                    if (cached != null)
-                    {
-                        row.Status = cached.Status;
-                        row.Percent = cached.Percent;
-                        row.Note = cached.Note;
-                        row.Data = cached.Data;
-                        row.Error = cached.Error;
-                    }
-                }
-
-            }
-
+            var jobViewList = jobClient.GetJobViews(pageIndex, pageSize);
             var output = new Dictionary<string, object>();
-            output.Add("data", result);
-            output.Add("itemsCount", totalCount);
+            output.Add("data", jobViewList.Items);
+            output.Add("itemsCount", jobViewList.Total);
 
             return Json(output, JsonRequestBehavior.AllowGet);
         }
