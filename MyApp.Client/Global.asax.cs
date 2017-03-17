@@ -41,17 +41,20 @@ namespace MyApp.Client
             serverConfig.EncryptionKey = ConfigurationManager.AppSettings["ShiftEncryptionParametersKey"]; //optional, will encrypt parameters in DB if exists
             serverConfig.MaxRunnableJobs = Convert.ToInt32(ConfigurationManager.AppSettings["MaxRunableJobs"]); 
             serverConfig.ProcessID = ConfigurationManager.AppSettings["ShiftPID"];
+
             serverConfig.StorageMode = ConfigurationManager.AppSettings["StorageMode"];
+            var progressDBInterval = ConfigurationManager.AppSettings["ProgressDBInterval"];
+            if(!string.IsNullOrWhiteSpace(progressDBInterval))
+                serverConfig.ProgressDBInterval = TimeSpan.Parse(progressDBInterval); //Interval when progress is updated in main DB
 
             var autoDeletePeriod = ConfigurationManager.AppSettings["AutoDeletePeriod"];
             serverConfig.AutoDeletePeriod = string.IsNullOrWhiteSpace(autoDeletePeriod) ? null : (int?)Convert.ToInt32(autoDeletePeriod);
-            serverConfig.AutoDeleteStatus = new List<JobStatus?> { JobStatus.Completed }; //Auto delete only the jobs that had Stopped or with Error
-            serverConfig.ProgressDBInterval = TimeSpan.Parse(ConfigurationManager.AppSettings["ProgressDBInterval"]); //Interval when progress is updated in main DB
+            serverConfig.AutoDeleteStatus = new List<JobStatus?> { JobStatus.Completed, null }; //Auto delete only the jobs that had Stopped or with Error
 
+            //serverConfig.ServerTimerInterval = Convert.ToInt32(ConfigurationManager.AppSettings["ServerTimerInterval"]); //optional: default every 5 sec for server running jobs
+            //serverConfig.ServerTimerInterval2 = Convert.ToInt32(ConfigurationManager.AppSettings["ServerTimerInterval2"]); //optional: default every 10 sec for server CleanUp()
             //serverConfig.AssemblyFolder = ConfigurationManager.AppSettings["AssemblyFolder"];
             //serverConfig.AssemblyListPath = ConfigurationManager.AppSettings["AssemblyListPath"]; 
-            //serverConfig.ServerTimerInterval = 5000; //optional: default every 5 sec for server running jobs
-            //serverConfig.ServerTimerInterval2 = 10000; //optional: default every 10 sec for server CleanUp()
 
             //For this demo, we're running the background process server in the same process as the web client
             //It's recommended to run the server in a separate process, such as windows service or Azure WebJob or another app.

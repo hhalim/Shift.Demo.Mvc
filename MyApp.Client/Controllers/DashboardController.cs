@@ -2,13 +2,8 @@
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using System.Data.SqlClient;
 
 using Shift;
-using Global;
-using Shift.Entities;
-using Dapper;
-using System;
 
 namespace MyApp.Client.Controllers
 {
@@ -85,6 +80,16 @@ namespace MyApp.Client.Controllers
 
             //Set command to 'run-now', wait for RunServer to pickup and run it
             jobClient.SetCommandRunNow(ids);
+
+            return Json(true);
+        }
+
+        public ActionResult RunSelected(List<int> ids)
+        {
+            if (ids == null)
+                return Json(false);
+
+            jobServer.RunJobs(ids);
 
             return Json(true);
         }

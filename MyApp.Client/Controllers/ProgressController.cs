@@ -1,14 +1,7 @@
-﻿using Global;
-using Shift;
-using Shift.Entities;
+﻿using Shift;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using System.Data.SqlClient;
-
-using Dapper;
-using System;
 
 namespace MyApp.Client.Controllers
 {

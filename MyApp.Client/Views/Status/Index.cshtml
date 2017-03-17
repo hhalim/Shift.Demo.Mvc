@@ -1,0 +1,28 @@
+﻿@{
+    ViewBag.Title = "Status";
+    var appID = ViewBag.ApplicationID as string;
+    var result = ViewBag.Result as string;
+}
+
+<h2>@ViewBag.Title</h2>
+
+
+<div class="row">
+    <div class="col-sm-12">
+        <form action="@Url.Action("StatusCount", "Status")" method="post">
+            <p>
+                <label>Application ID:</label> <input name="appID" type="text" value="@appID" />
+            </p>
+            <p>
+                <label>User ID:</label> <input name="userID" type="text" value="" />
+            </p>
+            <p>
+                <button type="submit">Submit</button>
+            </p>
+        </form>
+
+        <p>
+            <label>Result: </label> <span>@result</span>
+        </p>
+    </div>
+</div>
