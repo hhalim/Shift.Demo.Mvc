@@ -251,9 +251,6 @@
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Project_Readme.html" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\MyApp.DataLayer\MyApp.DataLayer.csproj">
       <Project>{0c189d15-d1f5-44ac-ad4e-d85a74c0bff9}</Project>
       <Name>MyApp.DataLayer</Name>
