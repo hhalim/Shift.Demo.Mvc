@@ -13,7 +13,7 @@ namespace MyApp.BusinessLayer
     public class Job4
     {
 
-        public void Start(IProgress<ProgressInfo> progress, List<TestData> complexList)
+        public void Start(IProgress<ProgressInfo> progress, List<TestData> complexList, CancellationToken token)
         {
             var total = complexList.Count;
             var counter = 0;
@@ -21,6 +21,11 @@ namespace MyApp.BusinessLayer
 
             foreach (var row in complexList)
             {
+                if (token.IsCancellationRequested)
+                {
+                    token.ThrowIfCancellationRequested(); //throw OperationCanceledException
+                }
+
                 //Report progress
                 counter++;
                 pInfo.Percent = (int)Math.Round((counter / (double)total) * 100.00, MidpointRounding.AwayFromZero);

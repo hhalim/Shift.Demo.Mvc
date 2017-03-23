@@ -13,7 +13,7 @@ namespace MyApp.BusinessLayer
     public class Job2
     {
 
-        public void Start(IProgress<ProgressInfo> progress, int x)
+        public void Start(IProgress<ProgressInfo> progress, int x, CancellationToken token)
         {
             var total = 100; //get total for progress
             var counter = 0; //progress counter
@@ -21,6 +21,11 @@ namespace MyApp.BusinessLayer
 
             for (var i = 0; i < total; i++)
             {
+                if (token.IsCancellationRequested)
+                {
+                    token.ThrowIfCancellationRequested(); //throw OperationCanceledException
+                }
+
                 //Report progress
                 counter++;
                 var percent = (int)Math.Round((counter / (double)total) * 100.00, MidpointRounding.AwayFromZero);
@@ -49,7 +54,7 @@ namespace MyApp.BusinessLayer
 
                 //Do Job
                 x += i;
-                Thread.Sleep(2000);
+                Thread.Sleep(2500);
             }
 
         }

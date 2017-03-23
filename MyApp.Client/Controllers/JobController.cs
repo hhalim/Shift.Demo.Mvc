@@ -13,6 +13,7 @@ using Shift;
 using System.Resources;
 using System.Reflection;
 using System.Configuration;
+using System.Threading;
 
 namespace MyApp.Client.Controllers
 {
@@ -57,8 +58,9 @@ namespace MyApp.Client.Controllers
                 for (var i = 0; i < p2Count; i++)
                 {
                     var job2 = new Job2();
-                    var progress = new SynchronousProgress<ProgressInfo>();
-                    jobClient.Add(appID, () => job2.Start(progress, 1));
+                    var progress = new SynchronousProgress<ProgressInfo>(); //just a place holder to be replaced by real Progress object from the server
+                    var token = (new CancellationTokenSource()).Token; //just a place holder to be replaced by real Token object from the server
+                    jobClient.Add(appID, () => job2.Start(progress, 1, token));
                 }
 
                 message += p2Count + " - Job2 added to background server list. <br/>";
@@ -97,7 +99,8 @@ namespace MyApp.Client.Controllers
                 {
                     var job4 = new Job4();
                     var progress = new SynchronousProgress<ProgressInfo>();
-                    jobClient.Add(appID, () => job4.Start(progress, complexList));
+                    var token = (new CancellationTokenSource()).Token; //just a place holder to be replaced by real Token object from the server
+                    jobClient.Add(appID, () => job4.Start(progress, complexList, token));
                 }
 
                 message += p4Count + " - Job4 added to background server list. <br/>";
