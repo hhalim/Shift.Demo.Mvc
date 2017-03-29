@@ -77,13 +77,17 @@ function initializeGrid() {
         loadShading: true,
 
         fields: [
-            { name: "JobID", type: "number", width: "40", title: "JobID" },
-            { name: "AppID", type: "longtext", width: "50" },
-            { name: "UserID", type: "text", width: "40", title: "UID" },
-            { name: "ProcessID", type: "longtext", width: "60", title: "PID" },
-            { name: "StatusLabel", type: "text", width: "80", title: "Status" },
+            { name: "JobID", type: "longtext", width: "80", title: "JobID" },
+            { name: "ProcessID", type: "longtext", width: "80", title: "PID" },
+            {
+                name: "JobName", type: "text", width: "60", title: "Name",
+                itemTemplate: function (value, item) {
+                    return '<a href="' + methodUrl + '?jobID=' + item.JobID + '" target="_blank">' + value + '</a>';
+                }
+            },
+            { name: "StatusLabel", type: "text", width: "60", title: "Status" },
             { name: "Percent", type: "text", width: "50", title: "%" },
-            { name: "Note", type: "longtext", width: "180" },
+            { name: "Note", type: "longtext", width: "140" },
             { name: "Error", type: "longtext", width: "140" },
             { name: "Start", type: "date", width: "80" },
             { name: "End", type: "date", width: "80" },

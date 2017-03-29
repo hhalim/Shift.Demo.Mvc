@@ -17,7 +17,7 @@ namespace MyApp.Client.Controllers
             }
         }
 
-        public ActionResult Index(int jobID)
+        public ActionResult Index(string jobID)
         {
             ViewBag.JobView = jobClient.GetJobView(jobID);
 

@@ -18,13 +18,13 @@ namespace MyApp.Client.Controllers
         }
 
         // GET: RTProgress
-        public ActionResult Index(int jobID)
+        public ActionResult Index(string jobID)
         {
             ViewBag.JobID = jobID;
             return View();
         }
 
-        public ActionResult GetProgress(int jobID)
+        public ActionResult GetProgress(string jobID)
         {
             var jsProgress = jobClient.GetProgress(jobID);
 

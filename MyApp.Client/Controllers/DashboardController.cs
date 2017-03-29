@@ -39,7 +39,7 @@ namespace MyApp.Client.Controllers
             return Json(output, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Delete(List<int> ids)
+        public ActionResult Delete(List<string> ids)
         {
             if (ids == null)
                 return Json(false);
@@ -50,7 +50,7 @@ namespace MyApp.Client.Controllers
             return Json(true);
         }
 
-        public ActionResult Reset(List<int> ids)
+        public ActionResult Reset(List<string> ids)
         {
             if (ids == null)
                 return Json(false);
@@ -62,7 +62,7 @@ namespace MyApp.Client.Controllers
         }
 
         #region Shift Actions
-        public ActionResult Stop(List<int> ids)
+        public ActionResult Stop(List<string> ids)
         {
             if (ids == null)
                 return Json(false);
@@ -73,7 +73,7 @@ namespace MyApp.Client.Controllers
             return Json(true);
         }
 
-        public ActionResult RunNow(List<int> ids)
+        public ActionResult RunNow(List<string> ids)
         {
             if (ids == null)
                 return Json(false);
@@ -84,7 +84,7 @@ namespace MyApp.Client.Controllers
             return Json(true);
         }
 
-        public ActionResult RunSelected(List<int> ids)
+        public ActionResult RunSelected(List<string> ids)
         {
             if (ids == null)
                 return Json(false);

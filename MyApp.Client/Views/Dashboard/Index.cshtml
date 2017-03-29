@@ -7,8 +7,8 @@
 <h2>@ViewBag.Title</h2>
 
 <div class="row">
-    <div class="col-sm-6">
-        <div class="command-bar btn-group">
+    <div class="col-sm-7">
+        <div class="command-bar btn-group-sm">
             <a href="#" class="btn btn-default" data-action="" data-key="refresh">Refresh</a>
             <a href="#" class="btn btn-default" data-action="@Url.Action("Reset", "Dashboard")" data-key="reset">Reset</a>
             <a href="#" class="btn btn-default" data-action="@Url.Action("Delete", "Dashboard")" data-key="delete">Delete</a>
@@ -18,8 +18,8 @@
         </div>
     </div>
 
-    <div class="col-sm-6">
-        <div class="command-bar btn-group pull-right">
+    <div class="col-sm-5">
+        <div class="command-bar btn-group-sm pull-right">
             <a href="#" class="btn btn-default" data-action="@Url.Action("RunServer", "Dashboard")" data-key="run-server">Run Server</a>
             <a href="#" class="btn btn-default" data-action="@Url.Action("StopServer", "Dashboard")" data-key="stop-server">Stop Server</a>
             <a href="#" class="btn btn-default" data-action="@Url.Action("CleanUp", "Dashboard")" data-key="clean-up">Server Clean Up</a>
@@ -107,17 +107,17 @@ function initializeGrid() {
                 }
             },
             {
-                name: "JobID", type: "number", width: "60", 
+                name: "JobID", type: "text", width: "60", 
                 itemTemplate: function (value, item) {
-                    return '<a href="' + rtProgressUrl + '?jobID=' + value + '" target="_blank">' + value + '</a>';
+                    return '<div style="overflow-y: auto;"> <a href="' + rtProgressUrl + '?jobID=' + value + '" target="_blank">' + value + '</a></div>';
                 }
             },
-            { name: "AppID", type: "longtext", width: "60" },
-            { name: "UserID", type: "text", width: "40", title: "UID" },
-            { name: "ProcessID", type: "longtext", width: "60", title: "PID" },
-            { name: "JobType", type: "text", width: "80", title: "Type" },
+            { name: "AppID", type: "longtext", width: "70" },
+            { name: "UserID", type: "text", width: "40", title: "UID", visible: false },
+            { name: "ProcessID", type: "longtext", width: "70", title: "PID" },
+            { name: "JobType", type: "text", width: "60", title: "Type", visible: false },
             {
-                name: "JobName", type: "text", width: "100", title: "Name",
+                name: "JobName", type: "text", width: "60", title: "Name",
                 itemTemplate: function (value, item) {
                     return '<a href="' + methodUrl + '?jobID=' + item.JobID + '" target="_blank">' + value + '</a>';
                 }
@@ -125,12 +125,12 @@ function initializeGrid() {
             { name: "InvokeMeta", type: "text", visible: false },
             { name: "Parameters", type: "text", visible: false },
             { name: "Status", type: "number", visible: false },
-            { name: "Command", type: "text", width: "70", visible: true },
+            { name: "Command", type: "text", width: "70" },
             { name: "StatusLabel", type: "text", width: "70", title: "Status" },
             { name: "Percent", type: "text", width: "50", title: "%" },
-            { name: "Note", type: "longtext", width: "160" },
-            { name: "Data", type: "longtext", width: "140" },
-            { name: "Error", type: "longtext", width: "140" },
+            { name: "Note", type: "longtext", width: "120" },
+            { name: "Data", type: "longtext", width: "120" },
+            { name: "Error", type: "longtext", width: "120" },
             { name: "Start", type: "date", width: "80" },
             { name: "End", type: "date", width: "80" },
             { name: "Created", type: "date", width: "80" }
