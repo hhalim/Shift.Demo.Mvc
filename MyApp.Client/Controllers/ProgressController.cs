@@ -1,5 +1,6 @@
 ﻿using Shift;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -22,9 +23,9 @@ namespace MyApp.Client.Controllers
             return View();
         }
 
-        public ActionResult ReadData(int? pageIndex, int? pageSize)
+        public async Task<ActionResult> ReadData(int? pageIndex, int? pageSize)
         {
-            var jobViewList = jobClient.GetJobViews(pageIndex, pageSize);
+            var jobViewList = await jobClient.GetJobViewsAsync(pageIndex, pageSize);
             var output = new Dictionary<string, object>();
             output.Add("data", jobViewList.Items);
             output.Add("itemsCount", jobViewList.Total);

@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using Shift;
 using System.Configuration;
 using Newtonsoft.Json;
+using System.Threading.Tasks;
 
 namespace MyApp.Client.Controllers
 {
@@ -20,9 +21,9 @@ namespace MyApp.Client.Controllers
 
         }
 
-        public ActionResult StatusCount(string appID, string userID)
+        public async Task<ActionResult> StatusCount(string appID, string userID)
         {
-            var output = jobClient.GetJobStatusCount(appID, userID);
+            var output = await jobClient.GetJobStatusCountAsync(appID, userID);
             ViewBag.Result = JsonConvert.SerializeObject(output);
             ViewBag.ApplicationID = ConfigurationManager.AppSettings["ApplicationID"];
             return View("Index");

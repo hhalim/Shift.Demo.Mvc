@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 
 using Shift;
+using System.Threading.Tasks;
 
 namespace MyApp.Client.Controllers
 {
@@ -17,9 +18,9 @@ namespace MyApp.Client.Controllers
             }
         }
 
-        public ActionResult Index(string jobID)
+        public async Task<ActionResult> Index(string jobID)
         {
-            ViewBag.JobView = jobClient.GetJobView(jobID);
+            ViewBag.JobView = await jobClient.GetJobViewAsync(jobID);
 
             return View();
         }

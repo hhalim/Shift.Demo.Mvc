@@ -4,6 +4,7 @@ using System.Web;
 using System.Web.Mvc;
 
 using Shift;
+using System.Threading.Tasks;
 
 namespace MyApp.Client.Controllers
 {
@@ -29,9 +30,9 @@ namespace MyApp.Client.Controllers
             return View();
         }
 
-        public ActionResult ReadData(int? pageIndex, int? pageSize)
+        public async Task<ActionResult> ReadData(int? pageIndex, int? pageSize)
         {
-            var jobViewList = jobClient.GetJobViews(pageIndex, pageSize);
+            var jobViewList = await jobClient.GetJobViewsAsync(pageIndex, pageSize);
             var output = new Dictionary<string, object>();
             output.Add("data", jobViewList.Items);
             output.Add("itemsCount", jobViewList.Total);
@@ -39,47 +40,47 @@ namespace MyApp.Client.Controllers
             return Json(output, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Delete(List<string> ids)
+        public async Task<ActionResult> Delete(List<string> ids)
         {
             if (ids == null)
                 return Json(false);
 
             //Delete jobs that's not running
-            jobClient.DeleteJobs(ids);
+            await jobClient.DeleteJobsAsync(ids);
 
             return Json(true);
         }
 
-        public ActionResult Reset(List<string> ids)
+        public async Task<ActionResult> Reset(List<string> ids)
         {
             if (ids == null)
                 return Json(false);
 
             //Reset jobs that's not running
-            jobClient.ResetJobs(ids);
+            await jobClient.ResetJobsAsync(ids);
 
             return Json(true);
         }
 
         #region Shift Actions
-        public ActionResult Stop(List<string> ids)
+        public async Task<ActionResult> Stop(List<string> ids)
         {
             if (ids == null)
                 return Json(false);
 
             //Set command to stop
-            jobClient.SetCommandStop(ids);
+            await jobClient.SetCommandStopAsync(ids);
 
             return Json(true);
         }
 
-        public ActionResult RunNow(List<string> ids)
+        public async Task<ActionResult> RunNow(List<string> ids)
         {
             if (ids == null)
                 return Json(false);
 
             //Set command to 'run-now', wait for RunServer to pickup and run it
-            jobClient.SetCommandRunNow(ids);
+            await jobClient.SetCommandRunNowAsync(ids);
 
             return Json(true);
         }
@@ -94,23 +95,30 @@ namespace MyApp.Client.Controllers
             return Json(true);
         }
 
-        public ActionResult RunServer()
+        //public ActionResult RunServer()
+        //{
+        //    //Jobs running through this function will be running under the IIS Process!
+        //    jobServer.RunServer(); //Run jobs server, use the MaxRunableJobs setting
+        //    return Json(true);
+        //}
+
+        public async Task<ActionResult> RunServer()
         {
-            //Jobs run through this function will be running under the IIS Process!
-            jobServer.RunServer(); //Run jobs server, use the MaxRunableJobs setting
+            //Jobs running through this function will be running under the IIS Process!
+            await jobServer.RunServerAsync(); //Run jobs server, use the MaxRunableJobs setting
             return Json(true);
         }
 
-        public ActionResult StopServer()
+        public async Task<ActionResult> StopServer()
         {
-            jobServer.StopServer(); 
+            await jobServer.StopServerAsync(); 
 
             return Json(true);
         }
 
-        public ActionResult CleanUp()
+        public async Task<ActionResult> CleanUp()
         {
-            jobServer.CleanUp(); 
+            await jobServer.CleanUpAsync(); 
 
             return Json(true);
         }

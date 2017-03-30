@@ -1,4 +1,5 @@
 ﻿using Shift;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -24,9 +25,9 @@ namespace MyApp.Client.Controllers
             return View();
         }
 
-        public ActionResult GetProgress(string jobID)
+        public async Task<ActionResult> GetProgress(string jobID)
         {
-            var jsProgress = jobClient.GetProgress(jobID);
+            var jsProgress = await jobClient.GetProgressAsync(jobID);
 
             return Json(jsProgress, JsonRequestBehavior.AllowGet);
         }
