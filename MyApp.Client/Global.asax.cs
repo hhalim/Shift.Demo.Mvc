@@ -52,7 +52,7 @@ namespace MyApp.Client
 
             var autoDeletePeriod = ConfigurationManager.AppSettings["AutoDeletePeriod"];
             serverConfig.AutoDeletePeriod = string.IsNullOrWhiteSpace(autoDeletePeriod) ? null : (int?)Convert.ToInt32(autoDeletePeriod);
-            serverConfig.AutoDeleteStatus = new List<JobStatus?> { JobStatus.Completed, null }; //Auto delete only the jobs that had Stopped or with Error
+            serverConfig.AutoDeleteStatus = new List<JobStatus?> { JobStatus.Completed }; //Auto delete only the jobs that had Stopped or with Error
 
             //serverConfig.ServerTimerInterval = Convert.ToInt32(ConfigurationManager.AppSettings["ServerTimerInterval"]); //optional: default every 5 sec for server running jobs
             //serverConfig.ServerTimerInterval2 = Convert.ToInt32(ConfigurationManager.AppSettings["ServerTimerInterval2"]); //optional: default every 10 sec for server CleanUp()

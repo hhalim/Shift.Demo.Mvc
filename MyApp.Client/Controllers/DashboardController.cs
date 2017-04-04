@@ -85,22 +85,15 @@ namespace MyApp.Client.Controllers
             return Json(true);
         }
 
-        public ActionResult RunSelected(List<string> ids)
+        public async Task<ActionResult> RunSelected(List<string> ids)
         {
             if (ids == null)
                 return Json(false);
 
-            jobServer.RunJobs(ids);
+            await jobServer.RunJobsAsync(ids);
 
             return Json(true);
         }
-
-        //public ActionResult RunServer()
-        //{
-        //    //Jobs running through this function will be running under the IIS Process!
-        //    jobServer.RunServer(); //Run jobs server, use the MaxRunableJobs setting
-        //    return Json(true);
-        //}
 
         public async Task<ActionResult> RunServer()
         {
