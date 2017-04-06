@@ -59,6 +59,8 @@ namespace MyApp.Client
             //serverConfig.AssemblyFolder = ConfigurationManager.AppSettings["AssemblyFolder"];
             //serverConfig.AssemblyListPath = ConfigurationManager.AppSettings["AssemblyListPath"]; 
 
+            serverConfig.PollingOnce = Convert.ToBoolean(ConfigurationManager.AppSettings["PollingOnce"]);
+
             //For this demo, we're running the background process server in the same process as the web client
             //It's recommended to run the server in a separate process, such as windows service or Azure WebJob or another app.
             var jobServer = new Shift.JobServer(serverConfig);
