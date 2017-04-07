@@ -25,7 +25,7 @@ namespace MyApp.Client.Controllers
 
         public async Task<ActionResult> ReadData(int? pageIndex, int? pageSize)
         {
-            var jobViewList = await jobClient.GetJobViewsAsync(pageIndex, pageSize);
+            var jobViewList = await jobClient.GetJobViewsAsync(pageIndex, pageSize).ConfigureAwait(false);
             var output = new Dictionary<string, object>();
             output.Add("data", jobViewList.Items);
             output.Add("itemsCount", jobViewList.Total);

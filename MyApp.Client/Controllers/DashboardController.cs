@@ -32,7 +32,7 @@ namespace MyApp.Client.Controllers
 
         public async Task<ActionResult> ReadData(int? pageIndex, int? pageSize)
         {
-            var jobViewList = await jobClient.GetJobViewsAsync(pageIndex, pageSize);
+            var jobViewList = await jobClient.GetJobViewsAsync(pageIndex, pageSize).ConfigureAwait(false);
             var output = new Dictionary<string, object>();
             output.Add("data", jobViewList.Items);
             output.Add("itemsCount", jobViewList.Total);
@@ -46,7 +46,7 @@ namespace MyApp.Client.Controllers
                 return Json(false);
 
             //Delete jobs that's not running
-            await jobClient.DeleteJobsAsync(ids);
+            await jobClient.DeleteJobsAsync(ids).ConfigureAwait(false);
 
             return Json(true);
         }
@@ -57,7 +57,7 @@ namespace MyApp.Client.Controllers
                 return Json(false);
 
             //Reset jobs that's not running
-            await jobClient.ResetJobsAsync(ids);
+            await jobClient.ResetJobsAsync(ids).ConfigureAwait(false);
 
             return Json(true);
         }
@@ -69,7 +69,7 @@ namespace MyApp.Client.Controllers
                 return Json(false);
 
             //Set command to stop
-            await jobClient.SetCommandStopAsync(ids);
+            await jobClient.SetCommandStopAsync(ids).ConfigureAwait(false);
 
             return Json(true);
         }
@@ -80,7 +80,7 @@ namespace MyApp.Client.Controllers
                 return Json(false);
 
             //Set command to 'run-now', wait for RunServer to pickup and run it
-            await jobClient.SetCommandRunNowAsync(ids);
+            await jobClient.SetCommandRunNowAsync(ids).ConfigureAwait(false);
 
             return Json(true);
         }
@@ -90,7 +90,7 @@ namespace MyApp.Client.Controllers
             if (ids == null)
                 return Json(false);
 
-            await jobServer.RunJobsAsync(ids);
+            await jobServer.RunJobsAsync(ids).ConfigureAwait(false);
 
             return Json(true);
         }
@@ -98,24 +98,23 @@ namespace MyApp.Client.Controllers
         public async Task<ActionResult> RunServer()
         {
             //Jobs running through this function will be running under the IIS Process!
-            await jobServer.RunServerAsync(); //Run jobs server, use the MaxRunableJobs setting
+            await jobServer.RunServerAsync().ConfigureAwait(false); //Run jobs server, use the MaxRunableJobs setting
             return Json(true);
         }
 
         public async Task<ActionResult> StopServer()
         {
-            await jobServer.StopServerAsync(); 
+            await jobServer.StopServerAsync().ConfigureAwait(false); 
 
             return Json(true);
         }
 
         public async Task<ActionResult> CleanUp()
         {
-            await jobServer.CleanUpAsync(); 
+            await jobServer.CleanUpAsync().ConfigureAwait(false);
 
             return Json(true);
         }
-
         #endregion
     }
 }

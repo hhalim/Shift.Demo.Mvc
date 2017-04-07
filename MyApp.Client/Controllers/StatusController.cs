@@ -23,7 +23,7 @@ namespace MyApp.Client.Controllers
 
         public async Task<ActionResult> StatusCount(string appID, string userID)
         {
-            var output = await jobClient.GetJobStatusCountAsync(appID, userID);
+            var output = await jobClient.GetJobStatusCountAsync(appID, userID).ConfigureAwait(false);
             ViewBag.Result = JsonConvert.SerializeObject(output);
             ViewBag.ApplicationID = ConfigurationManager.AppSettings["ApplicationID"];
             return View("Index");

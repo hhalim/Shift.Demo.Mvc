@@ -27,7 +27,7 @@ namespace MyApp.Client.Controllers
 
         public async Task<ActionResult> GetProgress(string jobID)
         {
-            var jsProgress = await jobClient.GetProgressAsync(jobID);
+            var jsProgress = await jobClient.GetProgressAsync(jobID).ConfigureAwait(false);
 
             return Json(jsProgress, JsonRequestBehavior.AllowGet);
         }
