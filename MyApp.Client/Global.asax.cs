@@ -42,9 +42,6 @@ namespace MyApp.Client
             serverConfig.MaxRunnableJobs = Convert.ToInt32(ConfigurationManager.AppSettings["MaxRunableJobs"]); 
             serverConfig.ProcessID = ConfigurationManager.AppSettings["ShiftPID"];
 
-            var threadMode = ConfigurationManager.AppSettings["ThreadMode"];
-            serverConfig.ThreadMode = string.IsNullOrWhiteSpace(threadMode) ? null : threadMode;
-
             serverConfig.StorageMode = ConfigurationManager.AppSettings["StorageMode"];
             var progressDBInterval = ConfigurationManager.AppSettings["ProgressDBInterval"];
             if(!string.IsNullOrWhiteSpace(progressDBInterval))
