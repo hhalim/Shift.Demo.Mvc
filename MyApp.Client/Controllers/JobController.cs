@@ -7,7 +7,6 @@ using System.Web;
 using System.Web.Mvc;
 using MyApp.DataLayer;
 using MyApp.BusinessLayer;
-using Global;
 using Shift.Entities;
 using Shift;
 using System.Resources;
@@ -39,7 +38,7 @@ namespace MyApp.Client.Controllers
         {
             var appID = ConfigurationManager.AppSettings["ApplicationID"];
             if (string.IsNullOrWhiteSpace(appID))
-                appID = "/Software/BGTest";
+                appID = "Shift.Demo.MVC";
 
             var message = "";
             if (p1Count > 0)

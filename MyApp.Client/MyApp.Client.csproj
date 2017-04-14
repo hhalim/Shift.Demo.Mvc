@@ -195,9 +195,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\ActionHelper.cs" />
-    <Compile Include="Helpers\DebugHelper.cs" />
-    <Compile Include="Helpers\Global.cs" />
-    <Compile Include="Helpers\Helpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
