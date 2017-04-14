@@ -5,7 +5,7 @@ A Shift client running in ASP.NET MVC web app. This demo demonstrates the Shift 
 Install Redis for windows [Redis-x64-<version>.msi](https://github.com/MSOpenTech/redis/releases) package.
 
 Or to use the SQL Server:
-- Run the sql script to create Shift database in [/setup/create_db.sql](https://github.com/hhalim/Shift.Demo.Client/blob/master/setup/create_db.sql). 
+- Run the sql script to create Shift database in [/setup/create_db.sql](https://github.com/hhalim/Shift.Demo.Mvc/blob/master/setup/create_db.sql). 
 - If you want to use Redis cache, setup and create a Redis instance. 
 
 Open this project solution in Visual Studio, update the App.config connection string and cache.
