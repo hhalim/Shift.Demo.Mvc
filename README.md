@@ -54,4 +54,5 @@ Open this project solution in Visual Studio, update the App.config connection st
 - Use the Status & Progress link to view the running jobs in auto refreshing grid. 
 - Try other action buttons to see what Shift can do.
 
-The Mark as Stop and Mark as Run-Now buttons only marks the selected jobs for those actions. Shift server will pick up those jobs and acted on them as marked. 
+The `Set to Stop` and `Set to Run-Now` buttons only marks the selected jobs for those actions. Shift server will pick up jobs and acted on them as marked. 
+
