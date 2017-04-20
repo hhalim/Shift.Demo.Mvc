@@ -104,7 +104,7 @@ namespace MyApp.Client.Controllers
 
         public async Task<ActionResult> StopServer()
         {
-            await jobServer.StopServerAsync().ConfigureAwait(false); 
+            await jobServer.StopServerAsync().ConfigureAwait(false);
 
             return Json(true);
         }

@@ -41,6 +41,7 @@ namespace MyApp.Client
             serverConfig.EncryptionKey = ConfigurationManager.AppSettings["ShiftEncryptionParametersKey"]; //optional, will encrypt parameters in DB if exists
             serverConfig.MaxRunnableJobs = Convert.ToInt32(ConfigurationManager.AppSettings["MaxRunnableJobs"]); 
             serverConfig.ProcessID = ConfigurationManager.AppSettings["ShiftPID"];
+            serverConfig.Workers = Convert.ToInt32(ConfigurationManager.AppSettings["ShiftWorkers"]);
 
             serverConfig.StorageMode = ConfigurationManager.AppSettings["StorageMode"];
             var progressDBInterval = ConfigurationManager.AppSettings["ProgressDBInterval"];
@@ -50,6 +51,9 @@ namespace MyApp.Client
             var autoDeletePeriod = ConfigurationManager.AppSettings["AutoDeletePeriod"];
             serverConfig.AutoDeletePeriod = string.IsNullOrWhiteSpace(autoDeletePeriod) ? null : (int?)Convert.ToInt32(autoDeletePeriod);
             serverConfig.AutoDeleteStatus = new List<JobStatus?> { JobStatus.Completed }; //Auto delete only the jobs that had Stopped or with Error
+
+            serverConfig.ForceStopServer = Convert.ToBoolean(ConfigurationManager.AppSettings["ForceStopServer"]); //Set to true to allow windows service to shut down after a set delay in StopServerDelay
+            serverConfig.StopServerDelay = Convert.ToInt32(ConfigurationManager.AppSettings["StopServerDelay"]);
 
             //serverConfig.ServerTimerInterval = Convert.ToInt32(ConfigurationManager.AppSettings["ServerTimerInterval"]); //optional: default every 5 sec for server running jobs
             //serverConfig.ServerTimerInterval2 = Convert.ToInt32(ConfigurationManager.AppSettings["ServerTimerInterval2"]); //optional: default every 10 sec for server CleanUp()
