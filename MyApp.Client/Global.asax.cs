@@ -27,6 +27,7 @@ namespace MyApp.Client
             //Shift Client
             var clientConfig = new Shift.ClientConfig();
             clientConfig.DBConnectionString = ConfigurationManager.ConnectionStrings["ShiftDBConnection"].ConnectionString;
+            clientConfig.DBAuthKey = ConfigurationManager.AppSettings["DocumentDBAuthKey"];
             clientConfig.UseCache = Convert.ToBoolean(ConfigurationManager.AppSettings["UseCache"]);
             clientConfig.CacheConfigurationString = ConfigurationManager.AppSettings["RedisConfiguration"]; //required only if UseCache = true
             clientConfig.EncryptionKey = ConfigurationManager.AppSettings["ShiftEncryptionParametersKey"]; //optional, will encrypt parameters in DB if exists
@@ -36,6 +37,7 @@ namespace MyApp.Client
             //Shift Server
             var serverConfig = new Shift.ServerConfig();
             serverConfig.DBConnectionString = ConfigurationManager.ConnectionStrings["ShiftDBConnection"].ConnectionString;
+            serverConfig.DBAuthKey = ConfigurationManager.AppSettings["DocumentDBAuthKey"];
             serverConfig.UseCache = Convert.ToBoolean(ConfigurationManager.AppSettings["UseCache"]);
             serverConfig.CacheConfigurationString = ConfigurationManager.AppSettings["RedisConfiguration"]; //required only if UseCache = true
             serverConfig.EncryptionKey = ConfigurationManager.AppSettings["ShiftEncryptionParametersKey"]; //optional, will encrypt parameters in DB if exists

@@ -35,8 +35,8 @@
       <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Shift.Entities, Version=1.0.7.2, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Shift.Entities.1.0.7.2\lib\net461\Shift.Entities.dll</HintPath>
+    <Reference Include="Shift.Entities, Version=1.0.7.3, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shift.Entities.1.0.7.3\lib\net461\Shift.Entities.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
