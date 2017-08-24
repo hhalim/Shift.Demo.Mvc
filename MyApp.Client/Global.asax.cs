@@ -28,8 +28,6 @@ namespace MyApp.Client
             var clientConfig = new Shift.ClientConfig();
             clientConfig.DBConnectionString = ConfigurationManager.ConnectionStrings["ShiftDBConnection"].ConnectionString;
             clientConfig.DBAuthKey = ConfigurationManager.AppSettings["DocumentDBAuthKey"];
-            clientConfig.UseCache = Convert.ToBoolean(ConfigurationManager.AppSettings["UseCache"]);
-            clientConfig.CacheConfigurationString = ConfigurationManager.AppSettings["RedisConfiguration"]; //required only if UseCache = true
             clientConfig.EncryptionKey = ConfigurationManager.AppSettings["ShiftEncryptionParametersKey"]; //optional, will encrypt parameters in DB if exists
             clientConfig.StorageMode = ConfigurationManager.AppSettings["StorageMode"];
             Application["Shift.JobClient"] = new JobClient(clientConfig); //only the DBConnectionString and CacheConfigurationString are required for Client's background job
@@ -38,21 +36,20 @@ namespace MyApp.Client
             var serverConfig = new Shift.ServerConfig();
             serverConfig.DBConnectionString = ConfigurationManager.ConnectionStrings["ShiftDBConnection"].ConnectionString;
             serverConfig.DBAuthKey = ConfigurationManager.AppSettings["DocumentDBAuthKey"];
-            serverConfig.UseCache = Convert.ToBoolean(ConfigurationManager.AppSettings["UseCache"]);
-            serverConfig.CacheConfigurationString = ConfigurationManager.AppSettings["RedisConfiguration"]; //required only if UseCache = true
             serverConfig.EncryptionKey = ConfigurationManager.AppSettings["ShiftEncryptionParametersKey"]; //optional, will encrypt parameters in DB if exists
-            serverConfig.MaxRunnableJobs = Convert.ToInt32(ConfigurationManager.AppSettings["MaxRunnableJobs"]); 
+            serverConfig.MaxRunnableJobs = Convert.ToInt32(ConfigurationManager.AppSettings["MaxRunnableJobs"]);
             serverConfig.ProcessID = ConfigurationManager.AppSettings["ShiftPID"];
             serverConfig.Workers = Convert.ToInt32(ConfigurationManager.AppSettings["ShiftWorkers"]);
 
             serverConfig.StorageMode = ConfigurationManager.AppSettings["StorageMode"];
             var progressDBInterval = ConfigurationManager.AppSettings["ProgressDBInterval"];
-            if(!string.IsNullOrWhiteSpace(progressDBInterval))
+
+            if (!string.IsNullOrWhiteSpace(progressDBInterval))
                 serverConfig.ProgressDBInterval = TimeSpan.Parse(progressDBInterval); //Interval when progress is updated in main DB
 
             var autoDeletePeriod = ConfigurationManager.AppSettings["AutoDeletePeriod"];
             serverConfig.AutoDeletePeriod = string.IsNullOrWhiteSpace(autoDeletePeriod) ? null : (int?)Convert.ToInt32(autoDeletePeriod);
-            serverConfig.AutoDeleteStatus = new List<JobStatus?> { JobStatus.Completed }; //Auto delete only the jobs that had Stopped or with Error
+            serverConfig.AutoDeleteStatus = new List<JobStatus?> { JobStatus.Completed }; //Auto delete only the jobs that had been Completed
 
             serverConfig.ForceStopServer = Convert.ToBoolean(ConfigurationManager.AppSettings["ForceStopServer"]); //Set to true to allow windows service to shut down after a set delay in StopServerDelay
             serverConfig.StopServerDelay = Convert.ToInt32(ConfigurationManager.AppSettings["StopServerDelay"]);

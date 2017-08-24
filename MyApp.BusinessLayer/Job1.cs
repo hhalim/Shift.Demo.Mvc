@@ -10,13 +10,20 @@ namespace MyApp.BusinessLayer
 {
     public class Job1  
     {
-        public void Start(string value, IProgress<ProgressInfo> progress)
+        public void Start(string value, IProgress<ProgressInfo> progress, CancellationToken cancelToken, PauseToken pauseToken)
         {
             var total = 10;
 
             var note = "";
             for (var i = 0; i < total; i++)
             {
+                if (cancelToken.IsCancellationRequested)
+                {
+                    cancelToken.ThrowIfCancellationRequested(); //throw OperationCanceledException
+                }
+
+                pauseToken.WaitWhilePausedAsync().GetAwaiter().GetResult();
+
                 note += i + " - " + value + "<br/> \n";
 
                 var pInfo = new ProgressInfo();

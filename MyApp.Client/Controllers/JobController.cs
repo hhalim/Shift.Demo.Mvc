@@ -34,7 +34,7 @@ namespace MyApp.Client.Controllers
             return View();
         }
 
-        public async Task<ActionResult> Add(int? p0Count, int? p1Count, int? p2Count, int? p3Count, int? p4Count, int? p5Count)
+        public async Task<ActionResult> Add(int? p1Count, int? p2Count, int? p3Count, int? p4Count, int? p5Count)
         {
             var appID = ConfigurationManager.AppSettings["ApplicationID"];
             if (string.IsNullOrWhiteSpace(appID))
@@ -46,11 +46,13 @@ namespace MyApp.Client.Controllers
                 for (var i = 0; i < p1Count; i++)
                 {
                     var job1 = new Job1();
-                    var progress = new SynchronousProgress<ProgressInfo>();
-                    await jobClient.AddAsync(appID, () => job1.Start("Hello World!", progress));
+                    var progress = new SynchronousProgress<ProgressInfo>(); //placeholder to be replaced by Server progress object
+                    var cancelToken = (new CancellationTokenSource()).Token; //placeholder to be replaced by Server token
+                    var pauseToken = (new PauseTokenSource()).Token;
+                    await jobClient.AddAsync(appID, () => job1.Start("Hello World!", progress, cancelToken, pauseToken));
                 }
 
-                message += p1Count + " - Job1 added to background server list. <br/>";
+                message += p1Count + " - Job1 added to queue. <br/>";
             }
 
             if (p2Count > 0)
@@ -58,12 +60,13 @@ namespace MyApp.Client.Controllers
                 for (var i = 0; i < p2Count; i++)
                 {
                     var job2 = new Job2();
-                    var progress = new SynchronousProgress<ProgressInfo>(); //just a place holder to be replaced by real Progress object from the server
-                    var token = (new CancellationTokenSource()).Token; //just a place holder to be replaced by real Token object from the server
-                    await jobClient.AddAsync(appID, () => job2.Start(progress, 1, token));
+                    var progress = new SynchronousProgress<ProgressInfo>();
+                    var cancelToken = (new CancellationTokenSource()).Token; //placeholder to be replaced by Server token
+                    var pauseToken = (new PauseTokenSource()).Token;
+                    await jobClient.AddAsync(appID, () => job2.Start(progress, 1, cancelToken, pauseToken));
                 }
 
-                message += p2Count + " - Job2 added to background server list. <br/>";
+                message += p2Count + " - Job2 added to queue. <br/>";
             }
 
             if (p3Count > 0)
@@ -81,7 +84,7 @@ namespace MyApp.Client.Controllers
                     await jobClient.AddAsync(appID, () => job3.Start(progress, simpleList));
                 }
 
-                message += p3Count + " - Job3 added to background server list. <br/>";
+                message += p3Count + " - Job3 added to queue. <br/>";
             }
 
             if (p4Count > 0)
@@ -99,11 +102,32 @@ namespace MyApp.Client.Controllers
                 {
                     var job4 = new Job4();
                     var progress = new SynchronousProgress<ProgressInfo>();
-                    var token = (new CancellationTokenSource()).Token; //just a place holder to be replaced by real Token object from the server
-                    await jobClient.AddAsync(appID, () => job4.Start(progress, complexList, token));
+                    var cancelToken = (new CancellationTokenSource()).Token; //placeholder to be replaced by Server token
+                    var pauseToken = (new PauseTokenSource()).Token;
+                    await jobClient.AddAsync(appID, () => job4.Start(progress, complexList, cancelToken, pauseToken));
                 }
 
-                message += p4Count + " - Job4 added to background server list. <br/>";
+                message += p4Count + " - Job4 added to queue. <br/>";
+            }
+
+            if (p5Count > 0)
+            {
+                var simpleList = new List<int>();
+                for (var i = 1; i <= 100; i++)
+                {
+                    simpleList.Add(i);
+                }
+
+                for (var i = 0; i < p5Count; i++)
+                {
+                    var job5 = new Job5();
+                    var cancelToken = (new CancellationTokenSource()).Token; //placeholder to be replaced by Server token
+                    var pauseToken = (new PauseTokenSource()).Token;
+                    var progress = new SynchronousProgress<ProgressInfo>();
+                    await jobClient.AddAsync(appID, () => job5.StartAsync(progress, simpleList, cancelToken, pauseToken));
+                }
+
+                message += p5Count + " - Job5 added to queue. <br/>";
             }
 
             ViewBag.Message = message;

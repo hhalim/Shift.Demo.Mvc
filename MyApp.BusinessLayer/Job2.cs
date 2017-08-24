@@ -13,7 +13,7 @@ namespace MyApp.BusinessLayer
     public class Job2
     {
 
-        public void Start(IProgress<ProgressInfo> progress, int x, CancellationToken token)
+        public void Start(IProgress<ProgressInfo> progress, int x, CancellationToken cancelToken, PauseToken pauseToken)
         {
             var total = 100; //get total for progress
             var counter = 0; //progress counter
@@ -21,10 +21,12 @@ namespace MyApp.BusinessLayer
 
             for (var i = 0; i < total; i++)
             {
-                if (token.IsCancellationRequested)
+                if (cancelToken.IsCancellationRequested)
                 {
-                    token.ThrowIfCancellationRequested(); //throw OperationCanceledException
+                    cancelToken.ThrowIfCancellationRequested(); //throw OperationCanceledException
                 }
+
+                pauseToken.WaitWhilePausedAsync().GetAwaiter().GetResult();
 
                 //Report progress
                 counter++;

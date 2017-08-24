@@ -74,6 +74,28 @@ namespace MyApp.Client.Controllers
             return Json(true);
         }
 
+        public async Task<ActionResult> Pause(List<string> ids)
+        {
+            if (ids == null)
+                return Json(false);
+
+            //Set command to stop
+            await jobClient.SetCommandPauseAsync(ids).ConfigureAwait(false);
+
+            return Json(true);
+        }
+
+        public async Task<ActionResult> Continue(List<string> ids)
+        {
+            if (ids == null)
+                return Json(false);
+
+            //Set command to stop
+            await jobClient.SetCommandContinueAsync(ids).ConfigureAwait(false);
+
+            return Json(true);
+        }
+
         public async Task<ActionResult> RunNow(List<string> ids)
         {
             if (ids == null)
@@ -91,6 +113,8 @@ namespace MyApp.Client.Controllers
                 return Json(false);
 
             await jobServer.RunJobsAsync(ids).ConfigureAwait(false);
+
+            //jobServer.RunJobs(ids);
 
             return Json(true);
         }
@@ -112,6 +136,15 @@ namespace MyApp.Client.Controllers
         public async Task<ActionResult> CleanUp()
         {
             await jobServer.CleanUpAsync().ConfigureAwait(false);
+
+            return Json(true);
+        }
+
+        public async Task<ActionResult> ProcessCmd()
+        {
+            await jobServer.PauseJobsAsync().ConfigureAwait(false);
+            await jobServer.ContinueJobsAsync().ConfigureAwait(false);
+            await jobServer.StopJobsAsync().ConfigureAwait(false);
 
             return Json(true);
         }
