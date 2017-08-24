@@ -4,9 +4,7 @@ A Shift client running in ASP.NET MVC web app. This demo demonstrates the Shift 
 ## Quick Startup
 Install Redis for windows [Redis-x64-<version>.msi](https://github.com/MSOpenTech/redis/releases) package.
 
-Or to use the SQL Server:
-- Run the sql script to create Shift database in [/setup/create_db.sql](https://github.com/hhalim/Shift.Demo.Mvc/blob/master/setup/create_db.sql). 
-- If you want to use Redis cache, setup and create a Redis instance. 
+Or to use the SQL Server, first run the sql script to create Shift database in [/setup/create_db.sql](https://github.com/hhalim/Shift.Demo.Mvc/blob/master/setup/create_db.sql). 
 
 Open this project solution in Visual Studio 2015, update the App.config connection string and cache.
 ```
@@ -34,18 +32,13 @@ Open this project solution in Visual Studio 2015, update the App.config connecti
     <!-- Shift AutoDelete -->
     <add key="AutoDeletePeriod" value="120" />
 
-    <!-- Shift Cache - Redis -->
-    <!--
-    <add key="UseCache" value="true" />
-    <add key="RedisConfiguration" value="localhost:6379" />
-    -->
-    
     <!--
     <add key="ServerTimerInterval" value="5000" />
     <add key="ServerTimerInterval2" value="10000" />
     <add key="AssemblyFolder" value="" />
     <add key="ShiftEncryptionParametersKey" value="[OPTIONAL_ENCRYPTIONKEY]" /> 
-    --></appSettings>
+    -->
+</appSettings>
 ```
 
 - Build and run the site.
@@ -54,5 +47,5 @@ Open this project solution in Visual Studio 2015, update the App.config connecti
 - Use the Status & Progress link to view the running jobs in auto refreshing grid. 
 - Try other action buttons to see what Shift can do.
 
-The `Set to Stop` and `Set to Run-Now` buttons only marks the selected jobs for those actions. Shift server will pick up jobs and acted on them as marked. 
+The `Stop Cmd`, `Pause Cmd`, `Continue Cmd`, and `Run-Now Cmd` buttons only marks the selected jobs for those actions. Shift server will pick up jobs and acted on them as marked. However if the jobs are manually started through `Run Selected` button, then you must manually use `Process Commands` action to execute the commands in the server process or nothing would happen to the background jobs.
 
