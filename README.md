@@ -43,7 +43,7 @@ Open this project solution in Visual Studio 2015, update the App.config connecti
 
 - Build and run the site.
 - Click Add Jobs link to add multiple test jobs into the queue.
-- Go to the Dashboard and click Run Server to run Shift server. Or select jobs and click Run Selected to run selected jobs.
+- Go to the Dashboard and click `Run Server` to run Shift server. Or select jobs and click `Run Selected` to run selected jobs.
 - Use the Status & Progress link to view the running jobs in auto refreshing grid. 
 - Try other action buttons to see what Shift can do.
 
