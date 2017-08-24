@@ -8,37 +8,48 @@ Or to use the SQL Server, first run the sql script to create Shift database in [
 
 Open this project solution in Visual Studio 2015, update the App.config connection string and cache.
 ```
-<connectionStrings>
-    <!-- LOCAL SQL 
+  <connectionStrings>
+    <!--
+    <add name="ShiftDBConnection" connectionString="mongodb://localhost" providerName="MongoDB" />
+    <add name="ShiftDBConnection" connectionString="https://localhost:8081/" providerName="DocumentDB" />
     <add name="ShiftDBConnection" connectionString="Data Source=localhost\SQL2014;Initial Catalog=ShiftJobsDB;Integrated Security=SSPI;" providerName="System.Data.SqlClient" />
     -->
-    <add name="ShiftDBConnection" connectionString="localhost:6379" providerName="System.Data.Redis" />
-</connectionStrings>
+    <add name="ShiftDBConnection" connectionString="localhost:6379" providerName="Redis" />
+  </connectionStrings>
 
-<appSettings>
+  <appSettings>   
     <!-- Shift running jobs settings if running process in IIS -->
     <add key="ApplicationID" value="Demo.MVC" />
-    <add key="MaxRunableJobs" value="10" />
+    <add key="MaxRunnableJobs" value="2" />
+    <add key="ShiftWorkers" value="2" />
+    <!--
     <add key="ShiftPID" value="4d9dd3d371804165b9a5783051b8debe" />
+    -->
     
     <!-- 
+    <add key="StorageMode" value="mongo" />
+    <add key="StorageMode" value="documentdb" />
+    <add key="DocumentDBAuthKey" value="C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==" />
     <add key="StorageMode" value="mssql" />
     -->
     <add key="StorageMode" value="redis" />
 
-    <!-- Set to 0 or low 1 sec for StorageMode = redis-->
+    <!-- Set to 0 or low 1 sec for StorageMode = redis/mongoDB (hour:min:sec) -->
     <add key="ProgressDBInterval" value="00:00:00" />
     
-    <!-- Shift AutoDelete -->
-    <add key="AutoDeletePeriod" value="120" />
+    <add key="ForceStopServer" value="true" />
+    <add key="StopServerDelay" value="5000" />
 
     <!--
+    <add key="AutoDeletePeriod" value="120" />
     <add key="ServerTimerInterval" value="5000" />
     <add key="ServerTimerInterval2" value="10000" />
     <add key="AssemblyFolder" value="" />
     <add key="ShiftEncryptionParametersKey" value="[OPTIONAL_ENCRYPTIONKEY]" /> 
+    <add key="PollingOnce" value="true" />
     -->
-</appSettings>
+  
+  </appSettings>
 ```
 
 - Build and run the site.
