@@ -172,8 +172,7 @@ function initCommands() {
             case 'refresh':
                 grid.jsGrid('render');
                 break;
-            case 'reset':
-            case 'delete':
+            case 'run-now':
             case 'stop':
             case 'pause':
             case 'continue':
@@ -182,7 +181,8 @@ function initCommands() {
                     grid.jsGrid('render');
                 });
                 break;
-            case 'run-now':
+            case 'reset':
+            case 'delete':
             case 'run-selected':
                 ids = getSelectedRecords('#grid');
                 if (confirm('Are you sure you want to ' + key.toUpperCase() + ' jobs?')) {
